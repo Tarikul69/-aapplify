@@ -1,0 +1,69 @@
+{% load static %}
+
+<nav class="border-b border-primary_c sticky top-0 z-50 bg-white">
+    <div class="container">
+        <div class="flex items-center justify-between h-24">
+            <a href="{% url 'main_home' %}">
+                {% comment %} {% include "clientapp/components/logo.html" %} {% endcomment %}
+                aapplify
+            </a>
+            <ul class="lg:flex items-center lg:gap-8 gap-12 hidden">
+                <li class="{% if request.resolver_match.url_name == 'main_home' %} active {% endif %}">
+                    <a href="{% url 'main_home' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">home</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'main_about' %} active {% endif %}">
+                    <a href="{% url 'main_about' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">about</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'main_contact' %} active {% endif %}">
+                    <a href="{% url 'main_contact' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">contact</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'main_blog' %} active {% endif %}">
+                    <a href="{% url 'main_blog' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">blog</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'main_services' %} active {% endif %}">
+                    <a href="{% url 'main_services' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">services</a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'main_faq' %} active {% endif %}">
+                    <a href="{% url 'main_faq' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">faq</a>
+                </li>
+            </ul>
+            <div class="lg:flex items-center gap-5 hidden">
+                {% comment %} <a href="{% url 'login' %}" class="underline-button-wrapper font-bold text-base">login</a> {% endcomment %}
+                {% comment %} <a href="{% url 'register' %}" class="flip-button-wrapper">sign up free</a> {% endcomment %}
+            </div>
+            <button id="toggleButton" type="button" class="lg:hidden block hamburger_menu">
+                <img class="inline" id="openIcon" src="{% static 'assets/openmenu.svg' %}" alt="SVG Image">
+                <img class="hidden" id="closeIcon" src="{% static 'assets/closemenu.svg' %}" alt="SVG Image">
+            </button>
+            <nav id="mobileMenu" class="fixed h-screen w-96 top-0 right-0 transition-all delay-100 duration-500 border-l border-black translate-x-96 bg-white">
+                <button id="closeSide" type="button" class="hamburger_menu flex justify-center items-center w-full py-5">
+                    <img class="border rounded-full p-1 border-black" src="{% static 'assets/closemenu.svg' %}" alt="SVG Image">
+                </button>
+                <ul class="bg-transparent py-4 px-10 capitalize grid gap-3 font-semibold navbar_active">
+                    <li class="menu-item {% if request.resolver_match.url_name == 'main_home' %} active {% endif %}">
+                        <a class="hover:text-primary_c transition-all duration-300 mobile_menu_list" href="{% url 'main_home' %}">home</a>
+                    </li>
+                    <li class="menu-item {% if request.resolver_match.url_name == 'main_about' %} active {% endif %}">
+                        <a class="hover:text-primary_c transition-all duration-300 mobile_menu_list" href="{% url 'main_about' %}">about</a>
+                    </li>
+                    <li class="menu-item {% if request.resolver_match.url_name == 'main_contact' %} active {% endif %}">
+                        <a class="hover:text-primary_c transition-all duration-300 mobile_menu_list" href="{% url 'main_contact' %}">contact</a>
+                    </li>
+                    <li class="menu-item {% if request.resolver_match.url_name == 'main_blog' %} active {% endif %}">
+                        <a class="hover:text-primary_c transition-all duration-300 mobile_menu_list" href="{% url 'main_blog' %}">blog</a>
+                    </li>
+                    <li class="menu-item {% if request.resolver_match.url_name == 'main_services' %} active {% endif %}">
+                        <a class="hover:text-primary_c transition-all duration-300 mobile_menu_list" href="{% url 'main_services' %}">services</a>
+                    </li>
+                    <li class="menu-item {% if request.resolver_match.url_name == 'main_faq' %} active {% endif %}">
+                        <a class="hover:text-primary_c transition-all duration-300 mobile_menu_list" href="{% url 'main_faq' %}">faq</a>
+                    </li>
+                    <li class="flex items-center justify-center gap-8 pt-5">
+                        {% comment %} <a href="{% url 'login' %}" class="underline-button-wrapper font-bold text-base mobile_menu_list">login</a>
+                        <a href="{% url 'register' %}" class="flip-button-wrapper mobile_menu_list">sign up free</a> {% endcomment %}
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</nav>
