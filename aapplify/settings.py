@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("DJ_SECRET_KEY")
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
-MEDIA_DIR = BASE_DIR / 'media'
+
 
 DEBUG = True
 SESSION_COOKIE_SECURE = False  # Set to False if testing on local development server
@@ -112,10 +112,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-
-STATICFILES_DIR = [STATIC_DIR]
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [STATIC_DIR]
 
 
 # Default primary key field type
