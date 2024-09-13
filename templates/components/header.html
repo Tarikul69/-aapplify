@@ -3,30 +3,32 @@
 <nav class="border-b border-primary_c sticky top-0 z-50 bg-white">
     <div class="container">
         <div class="flex items-center justify-between h-24">
-            <a href="{% url 'main_home' %}">
-                {% comment %} {% include "clientapp/components/logo.html" %} {% endcomment %}
-                aapplify
-            </a>
-            <ul class="lg:flex items-center lg:gap-8 gap-12 hidden">
-                <li class="{% if request.resolver_match.url_name == 'main_home' %} active {% endif %}">
-                    <a href="{% url 'main_home' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">home</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'main_about' %} active {% endif %}">
-                    <a href="{% url 'main_about' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">about</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'main_contact' %} active {% endif %}">
-                    <a href="{% url 'main_contact' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">contact</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'main_blog' %} active {% endif %}">
-                    <a href="{% url 'main_blog' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">blog</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'main_services' %} active {% endif %}">
-                    <a href="{% url 'main_services' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">services</a>
-                </li>
-                <li class="{% if request.resolver_match.url_name == 'main_faq' %} active {% endif %}">
-                    <a href="{% url 'main_faq' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">faq</a>
-                </li>
-            </ul>
+            <div class="flex items-center justify-center gap-20">
+                <a class="capitalize text-2xl font-semibold" href="{% url 'main_home' %}">
+                    {% comment %} {% include "clientapp/components/logo.html" %} {% endcomment %}
+                    aappli..
+                </a>
+                <ul class="lg:flex items-center lg:gap-8 gap-12 hidden text-lg font-medium">
+                    <li class="{% if request.resolver_match.url_name == 'main_home' %} active {% endif %}">
+                        <a href="{% url 'main_home' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">home</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'main_about' %} active {% endif %}">
+                        <a href="{% url 'main_about' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">about</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'main_contact' %} active {% endif %}">
+                        <a href="{% url 'main_contact' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">contact</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'main_blog' %} active {% endif %}">
+                        <a href="{% url 'main_blog' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">blog</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'main_services' %} active {% endif %}">
+                        <a href="{% url 'main_services' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">services</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'main_faq' %} active {% endif %}">
+                        <a href="{% url 'main_faq' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">faq</a>
+                    </li>
+                </ul>
+            </div>
             <div class="lg:flex items-center gap-5 hidden">
                 {% comment %} <a href="{% url 'login' %}" class="underline-button-wrapper font-bold text-base">login</a> {% endcomment %}
                 {% comment %} <a href="{% url 'register' %}" class="flip-button-wrapper">sign up free</a> {% endcomment %}

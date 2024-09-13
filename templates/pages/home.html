@@ -2,5 +2,13 @@
 {% load static %}
 
 {% block content %}
-    <p>This is homePage</p>
+
+    {% include "pages/home/herosection.html" %}
+    {% include "pages/home/unlockai.html" %}
+    {% include "pages/home/introduction.html" %}
+    {% include "pages/home/aboutsec.html" %}
+    {% include "pages/home/pricetable.html" %}
+    {% include "pages/home/faq.html" %}
+    {% include "pages/home/discoverai.html" %}
+
 {% endblock content %}

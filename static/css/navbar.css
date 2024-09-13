@@ -1,5 +1,5 @@
 .container {
-    max-width: /* Insert default max-width value here */;
+    max-width: 1920px;
     margin: auto;
 }
 
@@ -37,4 +37,11 @@
     .container {
         max-width: 350px;
     }
+}
+
+
+*,html{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
