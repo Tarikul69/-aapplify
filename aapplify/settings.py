@@ -33,10 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django_browser_reload",
 
-
-
     'corsheaders',
-    'mainapp'
+    'mainapp',
+    'authentication'
 ]
 
 MIDDLEWARE = [
@@ -69,7 +68,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'aapplify.wsgi.application'
-
+AUTH_USER_MODEL="authentication.User"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

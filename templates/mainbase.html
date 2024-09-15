@@ -43,8 +43,8 @@
     <title>Document</title>
   </head>
   <body>
-    {% include "components/header.html" %} 
-    {% block content %} {% endblock content %} 
+    {% include "components/header.html" %}
+    {% block content %} {% endblock content %}
     {% include "components/footer.html" %}
 
     <script
@@ -61,12 +61,33 @@
     ></script>
 
     <script>
-      gsap.to("#company .logo", {
-        transform: "translateX(-200%)",
-        repeat: -1,
-        duration: 8,
-        ease: "none",
-      });
+      // gsap.to("#company .logo", {
+      //   transform: "translateX(-600%)",
+      //   repeat: -1,
+      //   duration: 8,
+      //   ease: "none",
+      // });
+
+      const scrollers = document.querySelectorAll(".scroller");
+
+      function addScrollAnimation() {
+        scrollers.forEach((scroller) => {
+          scroller.setAttribute("data-animated", true);
+
+          const scrollerInner = scroller.querySelector(".scroller_inner");
+          const scrollerContent = Array.from(scrollerInner.children);
+
+          scrollerContent.forEach((item) => {
+            const duplicatedItem = item.cloneNode(true);
+            duplicatedItem.setAttribute("aria-hidden", true);
+            scrollerInner.appendChild(duplicatedItem);
+          });
+        });
+      }
+
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        addScrollAnimation();
+      }
 
       function heroAnimation() {
         var tl = gsap.timeline();
@@ -118,7 +139,6 @@
             start: "top 50%",
             end: "top -20%",
             scrub: 2,
-            markers: true,
           },
         });
 
@@ -147,7 +167,6 @@
             start: "top 50%",
             end: "top -20%",
             scrub: 2,
-            markers: true,
           },
         });
         tl.from(".introduction h1", {
@@ -167,11 +186,18 @@
       unlockAiAnimation();
       introductionAnimation();
     </script>
+    <script>
+      const faqs = document.querySelectorAll(".faq");
+      faqs.forEach((faq) => {
+        faq.addEventListener("click", () => {
+          faq.classList.toggle("active");
+        });
+      });
+    </script>
     <script src="{% static 'js/animation.js' %}" defer></script>
     <script src="{% static 'js/navmenu.js' %}" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    Initialize Swiper
     <script>
       var gallerySwiper = new Swiper(".gallerySwiper", {
         slidesPerView: "auto",
