@@ -1,12 +1,12 @@
 {% load static %}
 
-<section style="height: calc(100vh - 40px);" class="lg:grid grid-cols-2">
-    <div class="flex flex-col items-start justify-center gap-8 lg:px-44 md:px-20 px-8 py-12 ">
+<section style="height: calc(100vh - 40px);" class="lg:grid grid-cols-2 overflow-x-hidden">
+    <div class="hero-part1 flex flex-col items-start justify-center gap-8 lg:px-44 md:px-20 px-8 py-12 ">
         <h1 class="text-7xl font-bold">Harness AI for Success</h1>
         <p class="text-3xl">Unlock the potential of artificial intelligence to streamline your business operations and drive efficiency.</p>
         <button class="bg-slate-800 text-white px-10 py-4 text-lg ">Learn More</button>
     </div>
-    <div class="h-full bg-cover bg-center bg-no-repeat" style="background-image: url('{% static 'assets/images/heroimage.jpg' %}');">
+    <div class="hero-part2 h-full bg-cover bg-center bg-no-repeat" style="background-image: url('{% static 'assets/images/heroimage.jpg' %}');">
 
     </div>
 </section>

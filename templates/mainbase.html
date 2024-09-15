@@ -2,23 +2,208 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="stylesheet" href="{% static 'css/input.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="stylesheet" href="{% static 'css/output.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link
+      rel="stylesheet"
+      href="{% static 'css/navbar.css' %}"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/input.css' %}"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/output.css' %}"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/animation.css' %}"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/gallery.css' %}"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
     <title>Document</title>
-</head>
-<body>
-    {% include "components/header.html" %}
-
-    {% block content %} {% endblock content %}
-
+  </head>
+  <body>
+    {% include "components/header.html" %} 
+    {% block content %} {% endblock content %} 
     {% include "components/footer.html" %}
 
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+      integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+      integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script>
+      gsap.to("#company .logo", {
+        transform: "translateX(-200%)",
+        repeat: -1,
+        duration: 8,
+        ease: "none",
+      });
+
+      function heroAnimation() {
+        var tl = gsap.timeline();
+        tl.from("nav .logo, nav li, nav button", {
+          y: -30,
+          opacity: 0,
+          delay: 1,
+          duration: 0.5,
+          stagger: 0.1,
+        });
+        tl.from(
+          ".hero-part1 h1",
+          {
+            x: -200,
+            opacity: 0,
+            duration: 0.5,
+          },
+          "-=1"
+        );
+        tl.from(
+          ".hero-part1 p",
+          {
+            x: -50,
+            opacity: 0,
+            duration: 0.4,
+          },
+          "-=0.5"
+        );
+        tl.from(".hero-part1 button", {
+          opacity: 0,
+          duration: 0.4,
+        });
+        tl.from(
+          ".hero-part2",
+          {
+            x: 30,
+            opacity: 0,
+            duration: 0.5,
+          },
+          "-=0.7"
+        );
+      }
+
+      function unlockAiAnimation() {
+        var tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".unlockai",
+            scroller: "body",
+            start: "top 50%",
+            end: "top -20%",
+            scrub: 2,
+            markers: true,
+          },
+        });
+
+        tl.from(".unlockai h1", {
+          y: 50,
+          opacity: 0,
+          duration: 0.7,
+        });
+        tl.from(".unlockai p", {
+          y: 50,
+          opacity: 0,
+          duration: 0.7,
+        });
+        tl.from(".unlockai img", {
+          y: 50,
+          opacity: 0,
+          duration: 0.7,
+        });
+      }
+
+      function introductionAnimation() {
+        var tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".introduction",
+            scroller: "body",
+            start: "top 50%",
+            end: "top -20%",
+            scrub: 2,
+            markers: true,
+          },
+        });
+        tl.from(".introduction h1", {
+          y: 50,
+          opacity: 0,
+          duration: 0.7,
+        });
+        tl.from(".introduction .elem", {
+          y: 50,
+          opacity: 0,
+          duration: 0.7,
+          stagger: 0.3,
+        });
+      }
+
+      heroAnimation();
+      unlockAiAnimation();
+      introductionAnimation();
+    </script>
+    <script src="{% static 'js/animation.js' %}" defer></script>
     <script src="{% static 'js/navmenu.js' %}" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    Initialize Swiper
+    <script>
+      var gallerySwiper = new Swiper(".gallerySwiper", {
+        slidesPerView: "auto",
+        spaceBetween: 30,
+        loop: true,
+        cssMode: true,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+          el: ".swiper-pagination",
+        },
+        mousewheel: true,
+        keyboard: true,
+        centeredSlides: true,
+      });
+
+      var testimonialSwiper = new Swiper(".testimonialSwiper", {
+        spaceBetween: 30,
+        loop: true,
+        cssMode: true,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+          el: ".swiper-pagination",
+        },
+        mousewheel: true,
+        keyboard: true,
+      });
+    </script>
+  </body>
 </html>
