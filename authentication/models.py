@@ -38,4 +38,23 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
         ordering = ["-created_at"]
 
 
+class Staff(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff_profile')
 
+    class Meta:
+        verbose_name = _("Staff")
+        verbose_name_plural = _("Staff")
+
+    def __str__(self):
+        return f"Staff Profile for {self.user.email}"
+
+
+class RegularUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='regular_profile')
+
+    class Meta:
+        verbose_name = _("Regular User")
+        verbose_name_plural = _("Regular Users")
+
+    def __str__(self):
+        return f"Regular User Profile for {self.user.email}"

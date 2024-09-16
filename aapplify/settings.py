@@ -33,9 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django_browser_reload",
 
-    'corsheaders',
     'mainapp',
-    'authentication'
+    'corsheaders',
+    'authentication',
 ]
 
 MIDDLEWARE = [
