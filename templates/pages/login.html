@@ -1,0 +1,35 @@
+{% extends "mainbase.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="text-center grid grid-cols-5 gap-20 min-h-screen border-b">
+    <div class="col-span-2 flex flex-col justify-center items-center gap-5 bg-yellow-50">
+        <h1 class="text-5xl font-bold">Welcome Back!</h1>
+        <p class="text-lg">To keep connected with us please login with personal info</p>
+        <a href="" class="bg-blue-500 text-white px-10 py-4 text-lg rounded-lg">Sign in</a>
+    </div>
+
+    <div class="col-span-3 flex flex-col gap-5 justify-center py-36 pr-16">
+        <h1 class="text-5xl font-bold text-center">Create Account</h1>
+        <p class="text-lg text-center">Use your email for registration</p>
+
+        <form method="post" action="{% url 'auth_login' %}" class="flex flex-col items-start gap-5 mx-auto w-[480px]">
+            {% csrf_token %}
+            {{ login_form.non_field_errors }}
+            <div class="flex flex-col gap-2 items-start justify-center w-full">
+                <label class="text-xl" for="{{ login_form.email.id_for_label }}">Email</label>
+                {{ login_form.email }}
+                {{ login_form.email.errors }}
+            </div>
+            <div class="flex flex-col gap-2 items-start justify-center w-full">
+                <label class="text-xl" for="{{ login_form.password.id_for_label }}">Password</label>
+                {{ login_form.password }}
+                {{ login_form.password.errors }}
+            </div>
+            <input class="w-full py-4 bg-blue-800 text-white text-xl mt-4" type="submit" value="Submit">
+        </form>
+    </div>
+</section>
+
+{% endblock content %}

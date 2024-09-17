@@ -30,6 +30,11 @@
                 </ul>
             </div>
             <div class="lg:flex items-center gap-5 hidden">
+            {% if user.is_authenticated %}
+                <a href="{% url 'auth_logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'auth_login' %}" class="underline-button-wrapper font-bold text-base mobile_menu_list">login</a>
+            {% endif %}
                 {% comment %} <a href="{% url 'login' %}" class="underline-button-wrapper font-bold text-base">login</a> {% endcomment %}
                 {% comment %} <a href="{% url 'register' %}" class="flip-button-wrapper">sign up free</a> {% endcomment %}
             </div>
@@ -61,6 +66,11 @@
                         <a class="hover:text-primary_c transition-all duration-300 mobile_menu_list" href="{% url 'main_faq' %}">faq</a>
                     </li>
                     <li class="flex items-center justify-center gap-8 pt-5">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'auth_logout' %}">Logout</a>
+                        {% else %}
+                            <a href="{% url 'auth_login' %}" class="underline-button-wrapper font-bold text-base mobile_menu_list">login</a>
+                        {% endif %}
                         {% comment %} <a href="{% url 'login' %}" class="underline-button-wrapper font-bold text-base mobile_menu_list">login</a>
                         <a href="{% url 'register' %}" class="flip-button-wrapper mobile_menu_list">sign up free</a> {% endcomment %}
                     </li>
