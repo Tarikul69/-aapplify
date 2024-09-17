@@ -31,9 +31,10 @@
             </div>
             <div class="lg:flex items-center gap-5 hidden">
             {% if user.is_authenticated %}
-                <a href="{% url 'auth_logout' %}">Logout</a>
+                <a class="border-2 border-black py-3 px-6 rounded-lg" href="{% url 'auth_logout' %}">Logout</a>
             {% else %}
-                <a href="{% url 'auth_login' %}" class="underline-button-wrapper font-bold text-base mobile_menu_list">login</a>
+                <a href="{% url 'auth_login' %}" class="border-2 border-black py-3 px-6 rounded-lg">login</a>
+                <a href="{% url 'auth_register' %}" class="bg-blue-800 rounded-lg text-white py-3 px-6">Register</a>
             {% endif %}
                 {% comment %} <a href="{% url 'login' %}" class="underline-button-wrapper font-bold text-base">login</a> {% endcomment %}
                 {% comment %} <a href="{% url 'register' %}" class="flip-button-wrapper">sign up free</a> {% endcomment %}
@@ -67,7 +68,7 @@
                     </li>
                     <li class="flex items-center justify-center gap-8 pt-5">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'auth_logout' %}">Logout</a>
+                            <a class="" href="{% url 'auth_logout' %}">Logout</a>
                         {% else %}
                             <a href="{% url 'auth_login' %}" class="underline-button-wrapper font-bold text-base mobile_menu_list">login</a>
                         {% endif %}

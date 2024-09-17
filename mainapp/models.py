@@ -47,6 +47,28 @@ class Message(BaseModel):
 
 class Images(BaseModel):
     message = models.ForeignKey(Message, verbose_name=_("messages"), on_delete=models.CASCADE)
-    image = models.ImageField(_(""), upload_to=None, height_field=None, width_field=None, max_length=None)
+    image = models.ImageField(_(""), upload_to='message_img/', height_field=None, width_field=None, max_length=None)
 
-# class Service(BaseModel):
+class Service(BaseModel):
+    title = models.CharField(_("Title"), max_length=50)
+    short_description = models.TextField(_("Short Description"))
+    thumbnail_img = models.ImageField(_("Thumbnail Image"), upload_to='thumbnails/', height_field=None, width_field=None, max_length=None)
+    description = models.TextField(_("Description"))
+
+    def __str__(self):
+        return self.title
+
+class ServiceBooking(BaseModel):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='bookings')
+    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name='service_bookings')
+    booking_date = models.DateTimeField(_("Booking Date"), auto_now_add=True)
+    status = models.CharField(_("Status"), max_length=20, choices=[
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled')
+    ], default='pending')
+    price = models.DecimalField(_("Price"), max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.user} - {self.service.title} ({self.get_status_display()})"
