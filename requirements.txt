@@ -3,7 +3,7 @@ anyio==4.4.0
 asgiref==3.8.1
 bcrypt==4.2.0
 click==8.1.7
-Django==5.1
+Django==4.2
 django-cors-headers==4.4.0
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
@@ -27,3 +27,4 @@ uvicorn==0.30.6
 django-browser-reload
 python-slugify
 django-ckeditor-5
+django-jazzmin

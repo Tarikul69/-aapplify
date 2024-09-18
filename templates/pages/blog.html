@@ -2,18 +2,23 @@
 {% load static %}
 
 {% block content %}
-    <h1>Blog Posts</h1>
+    <section class="container py-28">
+        <h1 class="text-5xl font-bold text-left mb-8 capitalize">Blog Articles</h1>
 
-    {% for blog in blogs %}
-        <div class="blog-post">
-            <h2>{{ blog.title }}</h2>
-            <p>{{ blog.body|truncatewords:30 }}</p>
-            <p><strong>Created By:</strong> {{ blog.created_by.username }}</p>
-            <p><strong>Published At:</strong> {{ blog.published_at }}</p>
-            <a href="{% url 'blog_detail' blog.slug %}">Read More</a>
-        </div>
-        <hr>
-    {% empty %}
-        <p>No blog posts available.</p>
-    {% endfor %}
+        {% for blog in blogs %}
+            <div class="blog-post">
+                <div class="w-full h-96 pb-8">
+                    <img class="w-full rounded-lg h-full object-cover object-center" src="{{ service.thumbnail_img.url }}" alt="{{ service.title }}">
+                </div>
+                <h2 class="text-2xl font-semibold">{{ blog.title }}</h2>
+                <p class="text-lg pb-4">{{ blog.body|truncatewords:30 }}</p>
+                <p><strong>Created By:</strong> {{ blog.created_by.username }}</p>
+                <p><strong>Published At:</strong> {{ blog.published_at }}</p>
+                <a href="#">Read More</a>
+                {% comment %} <a href="{% url 'blog_detail' blog.slug %}">Read More</a> {% endcomment %}
+            </div>
+        {% empty %}
+            <p>No blog posts available.</p>
+        {% endfor %}
+    </section>
 {% endblock content %}

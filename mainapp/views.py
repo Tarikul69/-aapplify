@@ -66,7 +66,6 @@ class AddBlogView(LoginRequiredMixin, View):
 class ServiceView(View):
     def get(self, request, service_id=None):
         if service_id:
-            # Show details for a specific service
             service = get_object_or_404(Service, id=service_id)
             print(service)
             return render(request, 'pages/service_detail.html', {'service': service})
