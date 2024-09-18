@@ -12,53 +12,54 @@
 
 {% endblock %}
 
+
 {% block content %}
 
-    <section class="py-28">
+<section class="py-28">
 
-        <h2 class="text-5xl font-bold mb-4 text-center">Discover AI Solutions Today</h2>
+    <h2 class="text-5xl font-bold mb-4 text-center">Discover AI Solutions Today</h2>
 
-        {% comment %} <form method="post" enctype="multipart/form-data" class="container grid gap-5">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="{{ form.title.id_for_label }}" class="text-xl">Title</label>
-                {{ form.title }}
-            </div>
-            {% if form.title.errors %}
-                    {% for error in form.title.errors %}
-                        <p class="alert alert-danger">{{ error }}</p>
-                    {% endfor %}
-            {% endif %}
+    {% comment %} <form method="post" enctype="multipart/form-data" class="container grid gap-5">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}" class="text-xl">Title</label>
+            {{ form.title }}
+        </div>
+        {% if form.title.errors %}
+        {% for error in form.title.errors %}
+        <p class="alert alert-danger">{{ error }}</p>
+        {% endfor %}
+        {% endif %}
 
-            <div class="form-group">
-                <label for="{{ form.thumbnail.id_for_label }}" class="text-xl">Thumbnail</label>
-                {{ form.thumbnail }}
-            </div>
+        <div class="form-group">
+            <label for="{{ form.thumbnail.id_for_label }}" class="text-xl">Thumbnail</label>
+            {{ form.thumbnail }}
+        </div>
 
-            <div class="form-group">
-                <label for="{{ form.body.id_for_label }}" class="text-xl">Body</label>
-                {{ form.body }}
-            </div>
+        <div class="form-group">
+            <label for="{{ form.body.id_for_label }}" class="text-xl">Body</label>
+            {{ form.body }}
+        </div>
 
-            <button type="submit" class="bg-blue-800 rounded-lg text-white py-4 text-xl">Save</button>
-        </form> {% endcomment %}
+        <button type="submit" class="bg-blue-800 rounded-lg text-white py-4 text-xl">Save</button>
+    </form> {% endcomment %}
 
 
-        <form method="POST" enctype="multipart/form-data" class="container grid gap-5">
-            {% csrf_token %}
-            
-            <!-- Display non-field errors (general form errors) -->
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-        
+    <form method="POST" enctype="multipart/form-data" class="container grid gap-5">
+        {% csrf_token %}
 
-            {{ form.as_p }}
-            
-            <button type="submit">Submit</button>
-        </form>
-    </section>
+        <!-- Display non-field errors (general form errors) -->
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+
+        {{ form.as_p }}
+
+        <button type="submit">Submit</button>
+    </form>
+</section>
 
 {% endblock content %}

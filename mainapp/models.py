@@ -13,36 +13,26 @@ from django_ckeditor_5.fields import CKEditor5Field
 #         return self.name
 
 class Ticket(BaseModel):
-    name = models.CharField(_("Ticket Name"), max_length=50)
-    staff = models.OneToOneField('authentication.User', on_delete=models.CASCADE, related_name='staff', null=True, blank=True)
-    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name="user")
+    subject = models.CharField(_("Subject"), max_length=255)
+    staff = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name='staffs', null=True, blank=True)
+    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name="users")
 
     def __str__(self):
-        return self.name
+        return f"#Ticket{self.pk}"
 
     class Meta:
-        verbose_name = _("Room")
-        verbose_name_plural = _("Rooms")
+        verbose_name = _("Ticket")
+        verbose_name_plural = _("Tickets")
 
 
 
 
 class Message(BaseModel):
     room = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name="messages")
-    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name="user_messages")
-    staff = models.ForeignKey('authentication.User', on_delete=models.SET_NULL, null=True, blank=True, related_name="staff_responses")
-    content = models.TextField(_("Message Content"))
+    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name="message_users")
+    # content = models.TextField(_("Message Content"))
+    content = CKEditor5Field('Text', config_name='extends')
     is_staff_response = models.BooleanField(default=False)
-
-    def __str__(self):
-        if self.is_staff_response:
-            return f"Staff Response in Room {self.room.room_number} by {self.staff.user.email}"
-        return f"User Message in Room {self.room.room_number} by {self.user.email}"
-
-    def __str__(self):
-        sender = self.staff.user.email if self.staff else self.user.email
-        sender_type = "Staff" if self.staff else "User"
-        return f"{sender_type} Message in Room {self.room.room_number} by {sender}"
 
     class Meta:
         verbose_name = _("Message")

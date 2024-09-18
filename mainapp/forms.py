@@ -1,6 +1,21 @@
 from django import forms
-from .models import Service, BlogPost
+from .models import Service, BlogPost, Ticket, Message
 from django_ckeditor_5.widgets import CKEditor5Widget
+
+
+
+class TicketForm(forms.ModelForm):
+    message = forms.CharField(widget=CKEditor5Widget(attrs={'class': 'django_ckeditor_5'}))
+    class Meta:
+        model = Ticket
+        fields = ['subject', "message"]
+
+        widgets = {
+            "message": CKEditor5Widget(
+                  attrs={"class": "django_ckeditor_5"}
+              )
+        }
+
 
 
 class ServiceForm(forms.ModelForm):

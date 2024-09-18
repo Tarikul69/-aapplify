@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 
-from .models import Service, BlogPost
-from .forms import BlogPostForm
+from .models import Service, BlogPost, Ticket, Message
+from .forms import BlogPostForm, TicketForm
 
 # Create your views here.
 class HomeView(View):
@@ -76,7 +76,29 @@ class ServiceView(View):
 
 class TokenView(View):
     def get(self, request):
-        return render(request, 'pages/token.html')
+        form = TicketForm()
+        return render(request, 'pages/token.html', context={"form": form})
+    
+    def post(self, request, slug=None):
+        form = TicketForm(request.POST)
+        message = form.cleaned_data["message"]
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+
+            Message.objects.create(
+                content=message,
+                user=request.user,
+                room=ticket
+            )
+            form = TicketForm()
+            return redirect("/")
+        print(form.is_valid())
+        print(form.errors)
+
+        # Form is not valid, render the form with errors
+        return render(request, 'pages/addblog.html', {'form': form})
 
 
 
