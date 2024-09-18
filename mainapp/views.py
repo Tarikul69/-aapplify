@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.views import View
 from django.shortcuts import render, redirect
-from .models import Service
+from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
+
+from .models import Service, BlogPost
+from .forms import BlogPostForm
 
 # Create your views here.
 class HomeView(View):
@@ -15,7 +18,14 @@ class AboutView(View):
 
 class BlogView(View):
     def get(self, request):
-        return render(request, 'pages/blog.html')
+        # Get all blog posts from the database
+        blogs = BlogPost.objects.all()
+
+        # Pass the blog posts to the template
+        context = {
+            'blogs': blogs
+        }
+        return render(request, 'pages/blog.html', context)
 
 class ContactView(View):
     def get(self, request):
@@ -24,6 +34,36 @@ class ContactView(View):
 class FAQView(View):
     def get(self, request):
         return render(request, 'pages/faq.html')
+
+
+class AddBlogView(View):
+    def get(self, request, slug=None):
+        if slug:
+            # Edit an existing blog post
+            blog_post = get_object_or_404(BlogPost, slug=slug)
+            form = BlogPostForm(instance=blog_post)
+        else:
+            # Create a new blog post
+            form = BlogPostForm()
+
+        return render(request, 'pages/addblog.html', {'form': form})
+
+    def post(self, request, slug=None):
+        print(request.POST)
+        if slug:
+            # Update an existing blog post
+            blog_post = get_object_or_404(BlogPost, slug=slug)
+            form = BlogPostForm(request.POST, request.FILES, instance=blog_post)
+        else:
+            # Create a new blog post
+            form = BlogPostForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            blog_post = form.save()
+            return redirect(reverse('blog_post_detail', args=[blog_post.slug]))
+
+        # Form is not valid, render the form with errors
+        return render(request, 'pages/addblog.html', {'form': form})
 
 class ServiceView(View):
     def get(self, request, service_id=None):
@@ -36,6 +76,34 @@ class ServiceView(View):
         # List all services
         services = Service.objects.all()
         return render(request, 'pages/services.html', {'services': services})
+
+
+class BlogPostView(View):
+    def get(self, request, slug=None):
+        if slug:
+            # Edit an existing blog post
+            blog_post = get_object_or_404(BlogPost, slug=slug)
+            form = BlogPostForm(instance=blog_post)
+        else:
+            # Create a new blog post
+            form = BlogPostForm()
+
+        return render(request, 'pages/blog_post_form.html', {'form': form})
+
+    def post(self, request, slug=None):
+        if slug:
+            # Update an existing blog post
+            blog_post = get_object_or_404(BlogPost, slug=slug)
+            form = BlogPostForm(request.POST, request.FILES, instance=blog_post)
+        else:
+            # Create a new blog post
+            form = BlogPostForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            blog_post = form.save()
+            return redirect(reverse('blog_post_detail', args=[blog_post.slug]))
+
+        return render(request, 'pages/blog_post_form.html', {'form': form})
 
 # class ServiceListView(ListView):
 #     model = Service

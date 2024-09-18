@@ -72,3 +72,18 @@ class ServiceBooking(BaseModel):
 
     def __str__(self):
         return f"{self.user} - {self.service.title} ({self.get_status_display()})"
+
+class BlogPost(BaseModel):
+    title = models.CharField(_("Blog Title"), max_length=200)
+    slug = models.SlugField(_("Blog Slug"), unique=True)
+    thumbnail = models.ImageField(_("Blog Thumbnail"), upload_to=None, height_field=None, width_field=None, max_length=None)
+    created_by = models.ForeignKey("authentication.User", verbose_name=_("Created By The User"), on_delete=models.CASCADE)
+    body = models.TextField(_("Main Body"))
+    is_accepted = models.BooleanField(_("Blog accepted"))
+    published_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-published_at']
+
+    def __str__(self):
+        return self.title
