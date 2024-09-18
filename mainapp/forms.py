@@ -10,10 +10,10 @@ class ServiceForm(forms.ModelForm):
 class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
-        fields = ['title', 'slug', 'thumbnail', 'body']
+        fields = ['title', 'thumbnail', 'body']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
-            'slug': forms.TextInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
+            # 'slug': forms.TextInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
             'thumbnail': forms.ClearableFileInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
             'body': forms.Textarea(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
         }

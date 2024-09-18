@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
@@ -36,31 +37,28 @@ class FAQView(View):
         return render(request, 'pages/faq.html')
 
 
-class AddBlogView(View):
+class AddBlogView(LoginRequiredMixin, View):
+    login_url = '/auth/login/'
+    # redirect_field_name = 'redirect_to'
+
+
     def get(self, request, slug=None):
-        if slug:
-            # Edit an existing blog post
-            blog_post = get_object_or_404(BlogPost, slug=slug)
-            form = BlogPostForm(instance=blog_post)
-        else:
-            # Create a new blog post
-            form = BlogPostForm()
+        form = BlogPostForm()
 
         return render(request, 'pages/addblog.html', {'form': form})
 
     def post(self, request, slug=None):
-        print(request.POST)
-        if slug:
-            # Update an existing blog post
-            blog_post = get_object_or_404(BlogPost, slug=slug)
-            form = BlogPostForm(request.POST, request.FILES, instance=blog_post)
-        else:
-            # Create a new blog post
-            form = BlogPostForm(request.POST, request.FILES)
-
+        form = BlogPostForm(request.POST, request.FILES)
+        # form["created_by"] = request.user.pk
+        print(request.user)
         if form.is_valid():
-            blog_post = form.save()
+            blog_post = form.save(commit=False)
+            blog_post.created_by = request.user
+            blog_post.save()
+            form = BlogPostForm()
             return redirect(reverse('blog_post_detail', args=[blog_post.slug]))
+        print(form.is_valid())
+        print(form.errors)
 
         # Form is not valid, render the form with errors
         return render(request, 'pages/addblog.html', {'form': form})
@@ -76,6 +74,11 @@ class ServiceView(View):
         # List all services
         services = Service.objects.all()
         return render(request, 'pages/services.html', {'services': services})
+
+class TokenView(View):
+    def get(self, request):
+        return render(request, 'pages/token.html')
+
 
 
 class BlogPostView(View):

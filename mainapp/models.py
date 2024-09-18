@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext as _
 from authentication.models import User, BaseModel
+from slugify import slugify
+
 
 # class Ticket(BaseModel):
 #     name = models.CharField(_("Ticket Name"), max_length=50)
@@ -74,12 +76,12 @@ class ServiceBooking(BaseModel):
         return f"{self.user} - {self.service.title} ({self.get_status_display()})"
 
 class BlogPost(BaseModel):
-    title = models.CharField(_("Blog Title"), max_length=200)
+    title = models.CharField(_("Blog Title"), max_length=255, unique=True)
     slug = models.SlugField(_("Blog Slug"), unique=True)
     thumbnail = models.ImageField(_("Blog Thumbnail"), upload_to=None, height_field=None, width_field=None, max_length=None)
     created_by = models.ForeignKey("authentication.User", verbose_name=_("Created By The User"), on_delete=models.CASCADE)
     body = models.TextField(_("Main Body"))
-    is_accepted = models.BooleanField(_("Blog accepted"))
+    is_accepted = models.BooleanField(_("Blog accepted"), default=False)
     published_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -87,3 +89,8 @@ class BlogPost(BaseModel):
 
     def __str__(self):
         return self.title
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(BlogPost, self).save(*args, **kwargs)
