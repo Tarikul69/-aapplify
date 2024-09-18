@@ -10,7 +10,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 
-def email_sender(user_email, message, subject="BPL app password"):
+def email_sender(user_email, message, subject="Aapplify app password"):
     send_mail(
         subject,
         message,
@@ -20,7 +20,7 @@ def email_sender(user_email, message, subject="BPL app password"):
     )
 
 
-def password_set_email(user, reset=False):
+def password_set_email(user):
     email = user.email
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -28,16 +28,10 @@ def password_set_email(user, reset=False):
     reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
     
     subject = 'Set your new password'
-    if reset:
-        message = render_to_string('account/password_reset_email.html', {
+    message = render_to_string('account/password_reset_email.html', {
         'user': user,
         'reset_link': f"https://server.basepapers.co{reset_link}",
     })
-    else:
-        message = render_to_string('account/password_set_email.html', {
-            'user': user,
-            'reset_link': f"https://server.basepapers.co{reset_link}",
-        })
     
     # Send the email
     my_email = "fff147570@gmail.com"
