@@ -1,0 +1,9 @@
+*.log
+*.pot
+*.pyc
+**/migrations
+*.DS_Store
+**/__pycache__
+**/.DS_Store
+venv
+.vscode
