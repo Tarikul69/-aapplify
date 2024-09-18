@@ -1,5 +1,7 @@
 from django import forms
 from .models import Service, BlogPost
+from django_ckeditor_5.widgets import CKEditor5Widget
+
 
 class ServiceForm(forms.ModelForm):
     class Meta:
@@ -15,5 +17,7 @@ class BlogPostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
             # 'slug': forms.TextInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
             'thumbnail': forms.ClearableFileInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
-            'body': forms.Textarea(attrs={'class': 'bg-slate-300 w-full p-4 text-lg rounded-lg mt-3'}),
+            "body": CKEditor5Widget(
+                  attrs={"class": "django_ckeditor_5"}
+              )
         }

@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import gettext as _
 from authentication.models import User, BaseModel
 from slugify import slugify
+from django_ckeditor_5.fields import CKEditor5Field
+
 
 
 # class Ticket(BaseModel):
@@ -80,7 +82,8 @@ class BlogPost(BaseModel):
     slug = models.SlugField(_("Blog Slug"), unique=True)
     thumbnail = models.ImageField(_("Blog Thumbnail"), upload_to=None, height_field=None, width_field=None, max_length=None)
     created_by = models.ForeignKey("authentication.User", verbose_name=_("Created By The User"), on_delete=models.CASCADE)
-    body = models.TextField(_("Main Body"))
+    # body = models.TextField(_("Main Body"))
+    body = CKEditor5Field('Text', config_name='extends')
     is_accepted = models.BooleanField(_("Blog accepted"), default=False)
     published_at = models.DateTimeField(blank=True, null=True)
 

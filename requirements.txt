@@ -26,3 +26,4 @@ tzdata==2024.1
 uvicorn==0.30.6
 django-browser-reload
 python-slugify
+django-ckeditor-5

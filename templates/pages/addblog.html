@@ -1,11 +1,16 @@
 {% extends "mainbase.html" %}
 {% load static %}
 
+
+{% block css %}
 <style>
     .alert-danger {
         color: red !important;
     }
 </style>
+{{ form.media }}
+
+{% endblock %}
 
 {% block content %}
 
@@ -13,7 +18,7 @@
 
         <h2 class="text-5xl font-bold mb-4 text-center">Discover AI Solutions Today</h2>
 
-        <form method="post" enctype="multipart/form-data" class="container grid gap-5">
+        {% comment %} <form method="post" enctype="multipart/form-data" class="container grid gap-5">
             {% csrf_token %}
             <div class="form-group">
                 <label for="{{ form.title.id_for_label }}" class="text-xl">Title</label>
@@ -36,6 +41,23 @@
             </div>
 
             <button type="submit" class="bg-blue-800 rounded-lg text-white py-4 text-xl">Save</button>
+        </form> {% endcomment %}
+
+
+        <form method="POST" enctype="multipart/form-data" class="container grid gap-5">
+            {% csrf_token %}
+            
+            <!-- Display non-field errors (general form errors) -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+        
+
+            {{ form.as_p }}
+            
+            <button type="submit">Submit</button>
         </form>
     </section>
 
