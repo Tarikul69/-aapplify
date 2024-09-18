@@ -27,6 +27,12 @@
                     <li class="{% if request.resolver_match.url_name == 'main_faq' %} active {% endif %}">
                         <a href="{% url 'main_faq' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">faq</a>
                     </li>
+                    <li class="{% if request.resolver_match.url_name == 'add_blog' %} active {% endif %}">
+                        <a href="{% url 'add_blog' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">Add Blog</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'main_token' %} active {% endif %}">
+                        <a href="{% url 'main_token' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">Token</a>
+                    </li>
                 </ul>
             </div>
             <div class="lg:flex items-center gap-5 hidden">

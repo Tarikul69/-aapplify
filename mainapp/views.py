@@ -77,6 +77,11 @@ class ServiceView(View):
         services = Service.objects.all()
         return render(request, 'pages/services.html', {'services': services})
 
+class TokenView(View):
+    def get(self, request):
+        return render(request, 'pages/token.html')
+
+
 
 class BlogPostView(View):
     def get(self, request, slug=None):

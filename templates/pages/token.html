@@ -1,0 +1,30 @@
+{% extends "mainbase.html" %}
+{% load static %}
+
+{% block content %}
+
+    <section class="py-28 flex flex-col items-center justify-center container">
+        <h2 class="text-5xl font-bold text-center mb-8">Submit Ticket</h2>
+        <form action="" class="w-[575px]">
+            <div class="flex flex-col">
+                <label class="text-xl capitalize font-bold py-4" for="cc">CC</label>
+                <input class="bg-gray-300 py-4 px-4 w-full" type="text" name="cc" id="cc">
+            </div>
+            <div class="flex flex-col">
+                <label class="text-xl capitalize font-bold py-4" for="subject">subject</label>
+                <input class="bg-gray-300 py-4 px-4 w-full" type="text" name="subject" id="subject">
+            </div>
+            <div class="flex flex-col">
+                <label class="text-xl capitalize font-bold" for="message">Message</label>
+                <textarea name="message" id=""></textarea>
+            </div>
+            <div class="flex flex-col pb-4">
+                <label class="text-xl capitalize font-bold py-4" for="image">Attachments</label>
+                <input class="bg-gray-300 py-4 px-4 w-full" type="file" name="image" id="">
+            </div>
+            <input class="bg-blue-700 w-full py-4 text-white font-semibold" type="submit" value="Submit">
+        </form>
+    </section>
+
+
+{% endblock content %}
