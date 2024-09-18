@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg'}))
     phone = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg'}), required=False)
+    password1 = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg'}))
+    password2 = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'bg-slate-300 w-full p-4 text-lg'}))
 
     class Meta:
         model = User
