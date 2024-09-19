@@ -18,15 +18,16 @@ class AboutView(View):
         return render(request, 'pages/about.html')
 
 class BlogView(View):
-    def get(self, request):
-        # Get all blog posts from the database
-        blogs = BlogPost.objects.all()
+    def get(self, request, blog_id=None):
+        if blog_id:
+            # Get a single blog post by ID
+            blog = get_object_or_404(BlogPost, id=blog_id)
+            return render(request, 'pages/blog_detail.html', {'blog': blog})
 
-        # Pass the blog posts to the template
-        context = {
-            'blogs': blogs
-        }
-        return render(request, 'pages/blog.html', context)
+        # Get all blog posts if no blog_id is provided
+        blogs = BlogPost.objects.all()
+        return render(request, 'pages/blog.html', {'blogs': blogs})
+
 
 class ContactView(View):
     def get(self, request):
@@ -78,7 +79,7 @@ class TokenView(View):
     def get(self, request):
         form = TicketForm()
         return render(request, 'pages/token.html', context={"form": form})
-    
+
     def post(self, request, slug=None):
         form = TicketForm(request.POST)
         if form.is_valid():
