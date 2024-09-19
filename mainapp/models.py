@@ -44,8 +44,9 @@ class Images(BaseModel):
     image = models.ImageField(_(""), upload_to='message_img/', height_field=None, width_field=None, max_length=None)
 
 class Service(BaseModel):
-    title = models.CharField(_("Title"), max_length=50)
+    title = models.CharField(_("Title"), max_length=255)
     short_description = models.TextField(_("Short Description"))
+    price = models.DecimalField(_("Price"), max_digits=10, decimal_places=2)
     thumbnail_img = models.ImageField(_("Thumbnail Image"), upload_to='thumbnails/', height_field=None, width_field=None, max_length=None)
     description = models.TextField(_("Description"))
 
@@ -62,6 +63,7 @@ class ServiceBooking(BaseModel):
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled')
     ], default='pending')
+    title = models.CharField(_("Title"), max_length=255)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=2)
 
     def __str__(self):
@@ -70,7 +72,7 @@ class ServiceBooking(BaseModel):
 class BlogPost(BaseModel):
     title = models.CharField(_("Blog Title"), max_length=255, unique=True)
     slug = models.SlugField(_("Blog Slug"), unique=True)
-    thumbnail = models.ImageField(_("Blog Thumbnail"), upload_to='blog/', height_field=None, width_field=None, max_length=None)
+    thumbnail = models.ImageField(_("Blog Thumbnail"), upload_to='blog/')
     created_by = models.ForeignKey("authentication.User", verbose_name=_("Created By The User"), on_delete=models.CASCADE)
     # body = models.TextField(_("Main Body"))
     body = CKEditor5Field('Text', config_name='extends')

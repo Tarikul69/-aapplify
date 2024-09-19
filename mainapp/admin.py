@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, BlogPost
+from .models import Service, BlogPost, Ticket, Message
 
 # Register your models here.
 
@@ -10,3 +10,7 @@ class UserServiceAdmin(admin.ModelAdmin):
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
     list = ['id', 'title']
+
+
+admin.site.register(Ticket)
+admin.site.register(Message)

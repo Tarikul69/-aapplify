@@ -1,5 +1,6 @@
 {% extends "mainbase.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block content %}
     <section class="container py-28">
@@ -8,7 +9,10 @@
             {% for blog in blogs %}
             <div class="border">
                 <div class="w-full h-96 pb-8">
-                    <img class="w-full rounded-lg h-full object-cover object-center" src="{{ blog.thumbnail.url }}" alt="{{ blog.title }}">
+                    {% thumbnail blog.thumbnail "300x300" crop="center" as im %}
+                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    {% endthumbnail %}
+
                 </div>
                 <div class="p-8">
                     <h2 class="text-2xl font-semibold">{{ blog.title }}</h2>
