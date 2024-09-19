@@ -1,9 +1,10 @@
+.pyc
+__pycache__/
+**/__pycache__/
 *.log
 *.pot
-*.pyc
-**/migrations
 *.DS_Store
-**/__pycache__
 **/.DS_Store
-venv
-.vscode
+venv/
+.vscode/
+**/migrations/
