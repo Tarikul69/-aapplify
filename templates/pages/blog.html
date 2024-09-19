@@ -8,7 +8,7 @@
             {% for blog in blogs %}
             <div class="blog-post">
                 <div class="w-full h-96 pb-8">
-                    <img class="w-full rounded-lg h-full object-cover object-center" src="{{ blog.thumbnail }}" alt="{{ blog.title }}">
+                    <img class="w-full rounded-lg h-full object-cover object-center" src="{{ blog.thumbnail.url }}" alt="{{ blog.title }}">
                 </div>
                 <h2 class="text-2xl font-semibold">{{ blog.title }}</h2>
                 <p class="text-lg pb-4">{{ blog.body|truncatewords:30 }}</p>

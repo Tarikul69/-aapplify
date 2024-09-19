@@ -5,7 +5,7 @@ from django_ckeditor_5.widgets import CKEditor5Widget
 
 
 class TicketForm(forms.ModelForm):
-    message = forms.CharField(widget=CKEditor5Widget(attrs={'class': 'django_ckeditor_5'}))
+    message = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = Ticket
         fields = ['subject', "message"]
