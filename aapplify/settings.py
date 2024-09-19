@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	"django_browser_reload",
 	"django_ckeditor_5",
+	"sorl.thumbnail",
 
 	'mainapp',
 	'corsheaders',

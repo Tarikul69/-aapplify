@@ -81,8 +81,8 @@ class TokenView(View):
     
     def post(self, request, slug=None):
         form = TicketForm(request.POST)
-        message = form.cleaned_data["message"]
         if form.is_valid():
+            message = form.cleaned_data["message"]
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
