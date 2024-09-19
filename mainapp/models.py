@@ -80,7 +80,7 @@ class ServiceBooking(BaseModel):
 class BlogPost(BaseModel):
     title = models.CharField(_("Blog Title"), max_length=255, unique=True)
     slug = models.SlugField(_("Blog Slug"), unique=True)
-    thumbnail = models.ImageField(_("Blog Thumbnail"), upload_to=None, height_field=None, width_field=None, max_length=None)
+    thumbnail = models.ImageField(_("Blog Thumbnail"), upload_to='blog/', height_field=None, width_field=None, max_length=None)
     created_by = models.ForeignKey("authentication.User", verbose_name=_("Created By The User"), on_delete=models.CASCADE)
     # body = models.TextField(_("Main Body"))
     body = CKEditor5Field('Text', config_name='extends')
@@ -92,7 +92,7 @@ class BlogPost(BaseModel):
 
     def __str__(self):
         return self.title
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)

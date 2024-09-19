@@ -1,7 +1,7 @@
 {% load static %}
 
 <nav class="border-b border-primary_c sticky top-0 z-50 bg-white">
-    <div class="container">
+    <div class="container z-20">
         <div class="flex items-center justify-between h-24">
             <div class="flex items-center justify-center gap-20">
                 <a class="logo capitalize text-2xl font-semibold" href="{% url 'main_home' %}">
@@ -25,25 +25,38 @@
                         <a href="{% url 'main_services' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">services</a>
                     </li>
                     <li class="{% if request.resolver_match.url_name == 'main_faq' %} active {% endif %}">
-                        <a href="{% url 'main_faq' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">faq</a>
-                    </li>
-                    <li class="{% if request.resolver_match.url_name == 'add_blog' %} active {% endif %}">
-                        <a href="{% url 'add_blog' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">Add Blog</a>
-                    </li>
-                    <li class="{% if request.resolver_match.url_name == 'main_token' %} active {% endif %}">
-                        <a href="{% url 'main_token' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">Token</a>
+                        <a href="{% url 'main_faq' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">FAQ</a>
                     </li>
                 </ul>
             </div>
             <div class="lg:flex items-center gap-5 hidden">
             {% if user.is_authenticated %}
-                <a class="border-2 border-black py-3 px-6 rounded-lg" href="{% url 'auth_logout' %}">Logout</a>
+                <div class="flex gap-8 items-center justify-center">
+                    <div class="relative inline-block text-left">
+                        <div>
+                          <button type="button" class="inline-flex justify-center gap-x-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 w-10" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                            <img src="{% static 'assets/icons/profile.svg' %}" alt="">
+                          </button>
+                        </div>
+
+                        <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                          <div class="py-1" role="none">
+                            <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                            <a href="{% url 'main_token' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Profile</a>
+                            <a href="{% url 'main_token' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Tickets</a>
+                            <a href="{% url 'add_blog' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Add Blog</a>
+                            <hr>
+                            <a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-3" href="{% url 'auth_logout' %}">Logout</a>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+
+                </div>
             {% else %}
                 <a href="{% url 'auth_login' %}" class="border-2 border-black py-3 px-6 rounded-lg">login</a>
                 <a href="{% url 'auth_register' %}" class="bg-blue-800 rounded-lg text-white py-3 px-6">Register</a>
             {% endif %}
-                {% comment %} <a href="{% url 'login' %}" class="underline-button-wrapper font-bold text-base">login</a> {% endcomment %}
-                {% comment %} <a href="{% url 'register' %}" class="flip-button-wrapper">sign up free</a> {% endcomment %}
             </div>
             <button id="toggleButton" type="button" class="lg:hidden block hamburger_menu">
                 <img class="inline" id="openIcon" src="{% static 'assets/openmenu.svg' %}" alt="SVG Image">
@@ -78,8 +91,6 @@
                         {% else %}
                             <a href="{% url 'auth_login' %}" class="underline-button-wrapper font-bold text-base mobile_menu_list">login</a>
                         {% endif %}
-                        {% comment %} <a href="{% url 'login' %}" class="underline-button-wrapper font-bold text-base mobile_menu_list">login</a>
-                        <a href="{% url 'register' %}" class="flip-button-wrapper mobile_menu_list">sign up free</a> {% endcomment %}
                     </li>
                 </ul>
             </nav>
