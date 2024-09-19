@@ -1,0 +1,20 @@
+{% load static %}
+
+<section id="service-bookings">
+    <h2>Service Bookings</h2>
+    {% if booking %}
+        <ul>
+            {% for book in booking %}
+                <li>
+                    <strong>Service:</strong> {{ book.service.title }}<br>
+                    <strong>Title:</strong> {{ book.title }}<br>
+                    <strong>Status:</strong> {{ book.get_status_display }}<br>
+                    <strong>Price:</strong> ${{ book.price }}<br>
+                    <strong>Booking Date:</strong> {{ book.booking_date|date:"Y-m-d H:i" }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookings found.</p>
+    {% endif %}
+</section>

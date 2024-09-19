@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import HomeView, AboutView, BlogView, ContactView, FAQView, ServiceView, AddBlogView, BlogPostView, TokenView
+from .views import HomeView, AboutView, BlogView, ContactView, FAQView, ServiceView, AddBlogView, BlogPostView, TokenView, ProfileView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='main_home'),
+    path('profile/', ProfileView.as_view(), name='main_profile'),
     path('about/', AboutView.as_view(), name='main_about'),
     path('blog/', BlogView.as_view(), name='main_blog'),
     path('blog/<int:blog_id>/', BlogView.as_view(), name='blog-detail'),

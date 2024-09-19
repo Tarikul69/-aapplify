@@ -6,8 +6,9 @@ from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 
-from .models import Service, BlogPost, Ticket, Message
+from .models import Service, BlogPost, Ticket, Message, ServiceBooking
 from .forms import BlogPostForm, TicketForm
+from authentication.models import User
 
 # Create your views here.
 class HomeView(View):
@@ -26,7 +27,7 @@ class BlogView(View):
             return render(request, 'pages/blog_detail.html', {'blog': blog})
 
         # Get all blog posts if no blog_id is provided
-        blogs = BlogPost.objects.all()
+        blogs = BlogPost.objects.filter(is_accepted=True)
         return render(request, 'pages/blog.html', {'blogs': blogs})
 
 
@@ -131,6 +132,21 @@ class BlogPostView(View):
             return redirect(reverse('blog_post_detail', args=[blog_post.slug]))
 
         return render(request, 'pages/blog_post_form.html', {'form': form})
+
+class ProfileView(View):
+
+    def get(self, request):
+        profile = get_object_or_404(User, email=request.user)
+        blogs = BlogPost.objects.filter(created_by=profile)
+        booking = ServiceBooking.objects.filter(user=profile)
+
+        context = {
+        'profile': profile,
+        'blogs': blogs,
+        'booking': booking,
+            }
+
+        return render(request, 'pages/profile.html', context)
 
 # class ServiceListView(ListView):
 #     model = Service
