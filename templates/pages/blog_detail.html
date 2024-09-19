@@ -11,9 +11,9 @@
                 <img class="w-full rounded-lg h-full object-cover object-center" src="{{ blog.thumbnail.url }}" alt="{{ blog.title }}">
             </div>
             <h1 class="text-2xl font-semibold">{{ blog.title }}</h1>
-            <p class="text-lg pb-4">
-                {{ blog.body }}
-            </p>
+            <div class="text-lg pb-4 text-left">
+                {{ blog.body|safe }}
+            </div>
             <p><strong>Created By:</strong> {{ blog.created_by.username }}</p>
             <p><strong>Published At:</strong> {{ blog.published_at }}</p>
         </div>

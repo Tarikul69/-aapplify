@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
 
 from .models import Service, BlogPost, Ticket, Message
 from .forms import BlogPostForm, TicketForm
@@ -57,7 +58,8 @@ class AddBlogView(LoginRequiredMixin, View):
             blog_post.created_by = request.user
             blog_post.save()
             form = BlogPostForm()
-            return redirect(reverse('blog_post_detail', args=[blog_post.slug]))
+            messages.success(request, 'Your form has been submitted successfully!')
+            return redirect(reverse('add_blog'))
         print(form.is_valid())
         print(form.errors)
 
