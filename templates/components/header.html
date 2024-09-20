@@ -5,7 +5,9 @@
         <div class="flex items-center justify-between h-24">
             <div class="flex items-center justify-center gap-20">
                 <a class="logo capitalize text-2xl font-semibold" href="{% url 'main_home' %}">
-                    aappli..
+                    <div class="w-32">
+                        <img class="w-full" src="{% static 'assets/images/company_logo/main.png' %}" alt="">
+                    </div>
                 </a>
                 <ul class="lg:flex items-center lg:gap-8 gap-12 hidden text-lg font-medium">
                     <li class="{% if request.resolver_match.url_name == 'main_home' %} active {% endif %}">
