@@ -3,12 +3,16 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 
-from .models import Service, BlogPost, Ticket, Message, ServiceBooking
+import stripe
+
+from .models import Service, BlogPost, Ticket, Message, ServiceBooking, Payment
 from .forms import BlogPostForm, TicketForm
 from authentication.models import User
+
+stripe.api_key = 'your_stripe_secret_key'
 
 # Create your views here.
 class HomeView(View):
@@ -67,21 +71,13 @@ class AddBlogView(LoginRequiredMixin, View):
         # Form is not valid, render the form with errors
         return render(request, 'pages/addblog.html', {'form': form})
 
-class ServiceView(View):
-    def get(self, request, service_id=None):
-        if service_id:
-            service = get_object_or_404(Service, id=service_id)
-            print(service)
-            return render(request, 'pages/service_detail.html', {'service': service})
-
-        # List all services
-        services = Service.objects.all()
-        return render(request, 'pages/services.html', {'services': services})
-
 class TokenView(View):
     def get(self, request):
+        # Fetch the tickets for the logged-in user
+        tickets = Ticket.objects.filter(user=request.user)
         form = TicketForm()
-        return render(request, 'pages/token.html', context={"form": form})
+        return render(request, 'pages/token.html', context={"form": form, "tickets": tickets})
+
 
     def post(self, request, slug=None):
         form = TicketForm(request.POST)
@@ -97,12 +93,19 @@ class TokenView(View):
                 room=ticket
             )
             form = TicketForm()
-            return redirect("/")
+            return redirect(reverse('main_token'))
         print(form.is_valid())
         print(form.errors)
 
         # Form is not valid, render the form with errors
         return render(request, 'pages/addblog.html', {'form': form})
+
+class TicketDetailView(View):
+    def get(self, request, pk):
+        ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
+        messages = Message.objects.filter(room=ticket)
+        return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages})
+
 
 
 
@@ -148,29 +151,75 @@ class ProfileView(View):
 
         return render(request, 'pages/profile.html', context)
 
-# class ServiceListView(ListView):
-#     model = Service
-#     template_name = 'service_list.html'
-#     context_object_name = 'services'
+class ServiceView(View):
+    def get(self, request, service_id=None):
+        if service_id:
+            service = get_object_or_404(Service, id=service_id)
+            print(service)
+            return render(request, 'pages/service_detail.html', {'service': service})
 
-# class ServiceDetailView(DetailView):
-#     model = Service
-#     template_name = 'service_detail.html'
-#     context_object_name = 'service'
+        # List all services
+        services = Service.objects.all()
+        return render(request, 'pages/services.html', {'services': services})
 
-# class ServiceCreateView(CreateView):
-#     model = Service
-#     form_class = ServiceForm
-#     template_name = 'service_form.html'
-#     success_url = reverse_lazy('service-list')
+def create_checkout_session(request):
+    if request.method == "POST":
+        price_id = request.POST.get("price_id")
+        service_id = request.POST.get("service_id")
+        user = request.user  # Get the logged-in user
 
-# class ServiceUpdateView(UpdateView):
-#     model = Service
-#     form_class = ServiceForm
-#     template_name = 'service_form.html'
-#     success_url = reverse_lazy('service-list')
+        # Create a new booking with pending status
+        booking = ServiceBooking.objects.create(
+            service=get_object_or_404(Service, id=service_id),
+            user=user,
+            title=request.POST.get("title"),
+            price=request.POST.get("price")  # Ensure you're getting the price from the form
+        )
 
-# class ServiceDeleteView(DeleteView):
-#     model = Service
-#     template_name = 'service_confirm_delete.html'
-#     success_url = reverse_lazy('service-list')
+        try:
+            # Create the Stripe checkout session
+            checkout_session = stripe.checkout.Session.create(
+                line_items=[
+                    {
+                        "price": price_id,
+                        "quantity": 1,
+                    }
+                ],
+                mode="payment",
+                success_url=request.build_absolute_uri(reverse("success", kwargs={'booking_id': booking.id})),
+                cancel_url=request.build_absolute_uri(reverse("cancel")),
+            )
+            return redirect(checkout_session.url, code=303)
+        except Exception as e:
+            return str(e)  # Handle exceptions (logging in production is recommended)
+
+    return redirect('main_services')
+
+def success(request, booking_id):
+    booking = get_object_or_404(ServiceBooking, id=booking_id)
+
+    # Retrieve the Stripe session ID
+    session_id = request.GET.get('session_id')
+    if session_id:
+        try:
+            # Retrieve the session to confirm payment
+            checkout_session = stripe.checkout.Session.retrieve(session_id)
+            if checkout_session.payment_status == 'paid':
+                # Save payment information
+                Payment.objects.create(
+                    booking=booking,
+                    user=booking.user,
+                    stripe_payment_intent_id=checkout_session.payment_intent,
+                    amount=booking.price,
+                    status='succeeded',
+                )
+                # Update the booking status to confirmed
+                booking.status = 'confirmed'
+                booking.save()
+        except Exception as e:
+            return str(e)
+
+    return render(request, "pages/success.html")
+
+def cancel(request):
+    return render(request, "pages/cancel.html")

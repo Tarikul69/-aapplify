@@ -8,7 +8,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
+STRIPE_SECRET_KEY = config("DJ_STRIPE_KEY")
 SECRET_KEY = config("DJ_SECRET_KEY")
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'

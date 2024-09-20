@@ -24,9 +24,6 @@ class Ticket(BaseModel):
         verbose_name = _("Ticket")
         verbose_name_plural = _("Tickets")
 
-
-
-
 class Message(BaseModel):
     room = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name="messages")
     user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name="message_users")
@@ -68,6 +65,22 @@ class ServiceBooking(BaseModel):
 
     def __str__(self):
         return f"{self.user} - {self.service.title} ({self.get_status_display()})"
+
+class Payment(BaseModel):
+    booking = models.OneToOneField(ServiceBooking, on_delete=models.CASCADE, related_name="payment")
+    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name="payments")
+    stripe_payment_intent_id = models.CharField(_("Stripe Payment Intent ID"), max_length=255)
+    amount = models.DecimalField(_("Amount"), max_digits=10, decimal_places=2)
+    currency = models.CharField(_("Currency"), max_length=10, default="usd")
+    status = models.CharField(_("Payment Status"), max_length=20, choices=[
+        ('pending', 'Pending'),
+        ('succeeded', 'Succeeded'),
+        ('failed', 'Failed'),
+    ], default='pending')
+    created_at = models.DateTimeField(_("Payment Date"), auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment for {self.booking.service.title} by {self.user}"
 
 class BlogPost(BaseModel):
     title = models.CharField(_("Blog Title"), max_length=255, unique=True)
