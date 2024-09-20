@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
@@ -162,11 +164,14 @@ class ServiceView(View):
         services = Service.objects.all()
         return render(request, 'pages/services.html', {'services': services})
 
+@login_required(login_url="/auth/login/")
 def create_checkout_session(request):
     if request.method == "POST":
+        print("enter post method")
         price_id = request.POST.get("price_id")
         service_id = request.POST.get("service_id")
         user = request.user  # Get the logged-in user
+        print(user)
 
         # Create a new booking with pending status
         booking = ServiceBooking.objects.create(
@@ -191,7 +196,9 @@ def create_checkout_session(request):
             )
             return redirect(checkout_session.url, code=303)
         except Exception as e:
-            return str(e)  # Handle exceptions (logging in production is recommended)
+            print(e)
+            booking.delete()
+            raise Exception("error")
 
     return redirect('main_services')
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, BlogPost, Ticket, Message
+from .models import Service, BlogPost, Ticket, Message, ServiceBooking
 
 # Register your models here.
 
@@ -14,3 +14,4 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 admin.site.register(Ticket)
 admin.site.register(Message)
+admin.site.register(ServiceBooking)

@@ -28,3 +28,4 @@ django-browser-reload
 python-slugify
 django-ckeditor-5
 django-jazzmin
+stripe
