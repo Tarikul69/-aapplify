@@ -7,7 +7,7 @@
     .alert-danger {
         color: red !important;
     }
-    
+
 </style>
 {{ form.media }}
 {% endblock %}
@@ -20,17 +20,17 @@
 
         <form method="POST" enctype="multipart/form-data" class="container grid gap-5">
             {% csrf_token %}
-            
+
             {% if form.non_field_errors %}
                 <div class="alert alert-danger">
                     {{ form.non_field_errors }}
                 </div>
             {% endif %}
-        
+
 
             {{ form.as_p }}
-    
-            <button type="submit">Submit</button>
+
+            <button class="bg-blue-700 py-4 rounded-md text-xl text-white" type="submit">Submit</button>
         </form>
 
     </section>
