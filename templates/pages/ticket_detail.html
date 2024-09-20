@@ -1,0 +1,28 @@
+{% extends "mainbase.html" %}
+{% load static %}
+
+{% block content %}
+    <section class="py-28 flex flex-col items-center justify-center container">
+        <h2 class="text-4xl font-bold text-center mb-8">Messages for Ticket #{{ ticket.pk }}</h2>
+
+        <div class="w-full">
+            {% if messages %}
+                <ul class="list-none">
+                    {% for message in messages %}
+                        <li class="mb-4 p-4 border-b">
+                            <p class="font-semibold {{ message.is_staff_response|yesno:'text-blue-600,text-gray-800' }}">
+                                {{ message.user.username }}:
+                            </p>
+                            <p class="mt-2">{{ message.content|safe }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No messages found for this ticket.</p>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'main_token' %}" class="mt-8 text-blue-500 underline">Back to My Tickets</a>
+    </section>
+
+{% endblock content %}
