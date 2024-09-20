@@ -11,7 +11,7 @@ from django.contrib import messages
 import stripe
 
 from .models import Service, BlogPost, Ticket, Message, ServiceBooking, Payment
-from .forms import BlogPostForm, TicketForm
+from .forms import BlogPostForm, TicketForm, MessageForm
 from authentication.models import User
 
 stripe.api_key = 'your_stripe_secret_key'
@@ -76,7 +76,10 @@ class AddBlogView(LoginRequiredMixin, View):
 class TokenView(View):
     def get(self, request):
         # Fetch the tickets for the logged-in user
-        tickets = Ticket.objects.filter(user=request.user)
+        if request.user.is_staff:
+            tickets = Ticket.objects.all()
+        else:
+            tickets = Ticket.objects.filter(user=request.user)
         form = TicketForm()
         return render(request, 'pages/token.html', context={"form": form, "tickets": tickets})
 
@@ -104,10 +107,23 @@ class TokenView(View):
 
 class TicketDetailView(View):
     def get(self, request, pk):
-        ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
+        ticket = get_object_or_404(Ticket, pk=pk)
         messages = Message.objects.filter(room=ticket)
-        return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages})
+        form = MessageForm()  # Initialize the form
+        return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages, 'form': form})
 
+    def post(self, request, pk):
+        ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.room = ticket  # Associate message with the ticket
+            message.user = request.user  # Assuming the user is logged in
+            message.save()
+            return redirect('ticket_detail', pk=ticket.id)  # Redirect to the ticket detail page
+
+        messages = Message.objects.filter(room=ticket)
+        return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages, 'form': form})
 
 
 

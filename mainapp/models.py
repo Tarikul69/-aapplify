@@ -15,7 +15,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 class Ticket(BaseModel):
     subject = models.CharField(_("Subject"), max_length=255)
     staff = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name='staffs', null=True, blank=True)
-    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name="users")
+    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name="users", null=True, blank=True)
 
     def __str__(self):
         return f"#Ticket{self.pk}"

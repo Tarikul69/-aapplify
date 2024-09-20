@@ -9,7 +9,7 @@
             {% if messages %}
                 <ul class="list-none">
                     {% for message in messages %}
-                        <li class="mb-4 p-4 border-b">
+                        <li class="mb-4 p-4 ">
                             <p class="font-semibold {{ message.is_staff_response|yesno:'text-blue-600,text-gray-800' }}">
                                 {{ message.user.username }}:
                             </p>
@@ -20,6 +20,15 @@
             {% else %}
                 <p>No messages found for this ticket.</p>
             {% endif %}
+        </div>
+        <div class="w-full flex justify-start">
+            <form method="post" class="w-full">
+                {% csrf_token %}
+                <div class="mb-4">
+                    {{ form.content }}  <!-- Render the content field directly -->
+                </div>
+                <button type="submit" class="py-4 px-12 bg-blue-800 rounded-lg text-white text-xl mt-4">Send Message</button>
+            </form>
         </div>
 
         <a href="{% url 'main_token' %}" class="mt-8 text-blue-500 underline">Back to My Tickets</a>

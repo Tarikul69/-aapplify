@@ -73,6 +73,11 @@
                     <li><a href="{% url 'main_home' %}">Blog</a></li>
                     <li><a href="{% url 'main_home' %}">Services</a></li>
                     <li><a href="{% url 'main_home' %}">FAQ</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'main_profile' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Profile</a></li>
+                        <li><a href="{% url 'main_token' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Tickets</a></li>
+                        <li><a href="{% url 'add_blog' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Add Blog</a></li>
+                    {% endif %}
                     <li>
                         <hr>
                     </li>

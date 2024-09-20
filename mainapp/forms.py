@@ -51,3 +51,15 @@ class BlogPostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['body'].required = False
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'placeholder': 'Write your message here...',
+                'class': 'form-control p-3',
+                'rows': 4,  # Adjust the number of visible rows
+            }),
+        }
