@@ -27,6 +27,10 @@
                 {{ login_form.password }}
                 {{ login_form.password.errors }}
             </div>
+            <!-- Forgot Password Link -->
+            <div class="flex justify-end w-full">
+                <a href="{% url 'password_reset' %}" class="text-blue-500 hover:underline">Forgot Password?</a>
+            </div>
             <input class="w-full py-4 bg-blue-800 text-white text-xl mt-4" type="submit" value="Submit">
         </form>
     </div>
