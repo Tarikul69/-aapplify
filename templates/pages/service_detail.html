@@ -24,8 +24,10 @@
             </form> {% endcomment %}
             <form action="{% url 'create_checkout_session' %}" method="POST">
                 {% csrf_token %}
+                <input type="hidden" name="service_id" value="{{ service.id }}">
                 <button type="submit" id="checkout-button">Checkout</button>
             </form>
+
         </div>
     </div>
 </section>

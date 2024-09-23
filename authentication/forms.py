@@ -53,3 +53,7 @@ class UserLoginForm(forms.Form):
             if not user:
                 raise forms.ValidationError("Invalid login")
         return self.cleaned_data
+
+
+class PasswordReset(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'bg-slate-300 w-full p-4 text-lg'}))
