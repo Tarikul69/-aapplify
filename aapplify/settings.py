@@ -8,7 +8,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-STRIPE_SECRET_KEY = config("DJ_STRIPE_KEY")
+
 SECRET_KEY = config("DJ_SECRET_KEY")
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
@@ -133,6 +133,10 @@ EMAIL_HOST_PASSWORD = "uwxr vwgb bpcv lbew"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "Aapplify Management Team"
+
+STRIPE_PUBLIC_KEY=config("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY=config("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET=config("STRIPE_WEBHOOK_SECRET")
 
 
 # Default primary key field type
