@@ -103,12 +103,12 @@ def password_set_email(user, reset=False):
     if reset:
         message = render_to_string('pages/password_reset_email.html', {
         'user': user,
-        'reset_link': f"https://server.basepapers.co{reset_link}",
+        'reset_link': f"http://localhost:8000/auth/{reset_link}",
     })
     else:
         message = render_to_string('pages/password_set_email.html', {
             'user': user,
-            'reset_link': f"https://server.basepapers.co{reset_link}",
+            'reset_link': f"http://localhost:8000/auth/{reset_link}",
         })
 
     # Send the email

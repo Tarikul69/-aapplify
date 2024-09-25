@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomeView, AboutView, BlogView, ContactView, FAQView, ServiceView, AddBlogView, BlogPostView, TokenView, ProfileView, success, cancel, TicketDetailView, CreateCheckoutSessionView
+from .views import HomeView, AboutView, BlogView, ContactView, FAQView, ServiceView, AddBlogView, BlogPostView, TokenView, ProfileView, success, cancel, TicketDetailView, CreateCheckoutSessionView, stripe_webhook, success, cancel
 
 urlpatterns = [
     path('', HomeView.as_view(), name='main_home'),
@@ -18,5 +18,8 @@ urlpatterns = [
     path('success/', success, name='success'),
     path('cancel/', cancel, name='cancel'),
     path('tickets/<int:pk>/', TicketDetailView.as_view(), name='ticket_detail'),
+    path('stripe/webhook/', stripe_webhook, name='stripe_webhook'),
+    path('stripe/success/', success, name='success'),
+    path('stripe/cancel/', cancel, name='cancel'),
     # path('blog/<slug:slug>/detail/', BlogPostDetailView.as_view(), name='blog_post_detail'),
 ]
