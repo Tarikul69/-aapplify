@@ -1,20 +1,24 @@
 from django.shortcuts import render
-from django.views import View
+from django.views import View, generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
 from django.contrib import messages
+from django.http import JsonResponse
+from django.http import HttpResponse
 
 import stripe
+from django.conf import settings
 
-from .models import Service, BlogPost, Ticket, Message, ServiceBooking, Payment
+from .models import Service, BlogPost, Ticket, Message, ServiceBooking, Fulfillment
 from .forms import BlogPostForm, TicketForm, MessageForm
 from authentication.models import User
 
-stripe.api_key = 'your_stripe_secret_key'
+stripe.api_key = settings.STRIPE_SECRET_KEY
+endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 # Create your views here.
 class HomeView(View):
@@ -180,71 +184,116 @@ class ServiceView(View):
         services = Service.objects.all()
         return render(request, 'pages/services.html', {'services': services})
 
-@login_required(login_url="/auth/login/")
-def create_checkout_session(request):
-    if request.method == "POST":
-        print("enter post method")
-        price_id = request.POST.get("price_id")
-        service_id = request.POST.get("service_id")
-        user = request.user  # Get the logged-in user
-        print(user)
 
-        # Create a new booking with pending status
-        booking = ServiceBooking.objects.create(
-            service=get_object_or_404(Service, id=service_id),
-            user=user,
-            title=request.POST.get("title"),
-            price=request.POST.get("price")  # Ensure you're getting the price from the form
-        )
-
+class CreateCheckoutSessionView(generic.View):
+    def post(self, *args, **kwargs):
         try:
-            # Create the Stripe checkout session
+            host = self.request.get_host()
+            # Get service price dynamically from POST data
+            service_id = self.request.POST['service_id']
+
+            # Fetch service details from the database
+            service = get_object_or_404(Service, id=int(service_id))
+
+            # Convert price to an integer (in the smallest currency unit, such as poisha for BDT)
+            price_in_cents = int(float(service.price) * 100)
+
+            # Create a Checkout Session
             checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
                 line_items=[
                     {
-                        "price": price_id,
-                        "quantity": 1,
-                    }
+                        'price_data': {
+                            'currency': 'usd',
+                            'unit_amount': price_in_cents,  # Unit amount in the smallest currency unit
+                            'product_data': {
+                                'name': service.title,  # Name of the product
+                            },
+                        },
+                        'quantity': 1,
+                    },
                 ],
-                mode="payment",
-                # success_url="http://127.0.0.1:8000" + request.build_absolute_uri(reverse("success", kwargs={'booking_id': booking.id})),
-                # cancel_url="http://127.0.0.1:8000/" + request.build_absolute_uri(reverse("cancel")),
-                success_url="http://127.0.0.1:8000/success/",
-                cancel_url="http://127.0.0.1:8000/" + request.build_absolute_uri(reverse("cancel")),
+                mode='payment',
+                success_url=f"http://{host}{reverse('success')}",
+                cancel_url=f"http://{host}{reverse('cancel')}",
+                metadata={
+                    'service_id': str(service.id),
+                    'user_id': str(self.request.user.id)  # Assuming the user is logged in
+                }
             )
-            return redirect(checkout_session.url, code=303)
-        except Exception as e:
-            print(e)
-            booking.delete()
-            raise Exception("error")
 
-    return redirect('main_services')
+            return redirect(checkout_session.url, code=303)
+        except stripe.error.StripeError as e:
+            return JsonResponse({'error': str(e)}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
+
 
 def success(request, booking_id):
-    booking = get_object_or_404(ServiceBooking, id=booking_id)
-
-    # Retrieve the Stripe session ID
-    session_id = request.GET.get('session_id')
-    if session_id:
-        try:
-            # Retrieve the session to confirm payment
-            checkout_session = stripe.checkout.Session.retrieve(session_id)
-            if checkout_session.payment_status == 'paid':
-                # Save payment information
-                Payment.objects.create(
-                    booking=booking,
-                    user=booking.user,
-                    stripe_payment_intent_id=checkout_session.payment_intent,
-                    amount=booking.price,
-                    status='succeeded',
-                )
-                # Update the booking status to confirmed
-                booking.status = 'confirmed'
-                booking.save()
-        except Exception as e:
-            return str(e)
-
     return render(request, "pages/success.html")
 
 def cancel(request):
     return render(request, "pages/cancel.html")
+
+
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Handle the event
+    if event['type'] == 'checkout.session.completed' or event['type'] == 'checkout.session.async_payment_succeeded':
+        session = event['data']['object']
+        fulfill_checkout(session)
+
+    return HttpResponse(status=200)
+
+def fulfill_checkout(session):
+    session_id = session['id']
+
+    # Check if the fulfillment has already been done for this session
+    if Fulfillment.objects.filter(session_id=session_id, fulfilled=True).exists():
+        print(f"Session {session_id} has already been fulfilled.")
+        return
+
+    # Retrieve the line items and metadata from the session
+    checkout_session = stripe.checkout.Session.retrieve(
+        session_id,
+        expand=['line_items'],
+    )
+
+    # Extract service details from metadata
+    service_id = checkout_session.metadata['service_id']
+    user_id = checkout_session.metadata['user_id']
+
+    # Fetch the service and user from the database
+    service = get_object_or_404(Service, id=int(service_id))
+    user = get_object_or_404(User, id=int(user_id))
+
+    # Create a booking record for the user
+    booking = ServiceBooking.objects.create(
+        service=service,
+        user=user,
+        title=service.title,
+        price=service.price,
+        status='confirmed',  # Assuming the booking is confirmed after payment
+        booking_date=timezone.now()
+    )
+
+    # Record the fulfillment in the Fulfillment model
+    Fulfillment.objects.create(
+        session_id=session_id,
+        fulfilled=True
+    )
+    print(f"Service {service.title} booked for user {user.username}.")
