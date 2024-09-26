@@ -207,8 +207,10 @@ def create_checkout_session(request):
                     }
                 ],
                 mode="payment",
-                success_url=request.build_absolute_uri(reverse("success", kwargs={'booking_id': booking.id})),
-                cancel_url=request.build_absolute_uri(reverse("cancel")),
+                # success_url="http://127.0.0.1:8000" + request.build_absolute_uri(reverse("success", kwargs={'booking_id': booking.id})),
+                # cancel_url="http://127.0.0.1:8000/" + request.build_absolute_uri(reverse("cancel")),
+                success_url="http://127.0.0.1:8000/success/",
+                cancel_url="http://127.0.0.1:8000/" + request.build_absolute_uri(reverse("cancel")),
             )
             return redirect(checkout_session.url, code=303)
         except Exception as e:
