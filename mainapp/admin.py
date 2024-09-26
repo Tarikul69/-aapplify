@@ -15,3 +15,5 @@ class BlogPostAdmin(admin.ModelAdmin):
 admin.site.register(Ticket)
 admin.site.register(Message)
 admin.site.register(ServiceBooking)
+
+admin.site.site_header = 'Aaplify dashboard'
