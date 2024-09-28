@@ -19,7 +19,5 @@ urlpatterns = [
     path('cancel/', cancel, name='cancel'),
     path('tickets/<int:pk>/', TicketDetailView.as_view(), name='ticket_detail'),
     path('stripe/webhook/', stripe_webhook, name='stripe_webhook'),
-    path('stripe/success/', success, name='success'),
-    path('stripe/cancel/', cancel, name='cancel'),
     # path('blog/<slug:slug>/detail/', BlogPostDetailView.as_view(), name='blog_post_detail'),
 ]
