@@ -57,9 +57,7 @@ class MessageForm(forms.ModelForm):
         model = Message
         fields = ['content']
         widgets = {
-            'content': forms.Textarea(attrs={
-                'placeholder': 'Write your message here...',
-                'class': 'form-control p-3',
-                'rows': 4,  # Adjust the number of visible rows
-            }),
+            'content': CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}
+            ),
         }
