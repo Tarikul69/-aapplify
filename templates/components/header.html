@@ -9,7 +9,7 @@
                         <img class="w-full" src="{% static 'assets/images/company_logo/main.png' %}" alt="">
                     </div>
                 </a>
-                <ul class="lg:flex items-center lg:gap-8 gap-12 hidden text-lg font-medium">
+                <ul class="lg:flex hidden items-center lg:gap-8 gap-12 text-lg font-medium">
                     <li class="{% if request.resolver_match.url_name == 'main_home' %} active {% endif %}">
                         <a href="{% url 'main_home' %}" class="text-base font-medium capitalize hover:text-primary_c transition-all duration-300">home</a>
                     </li>
