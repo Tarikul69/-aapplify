@@ -229,7 +229,6 @@ class CreateCheckoutSessionView(generic.View):
                     'user_id': str(self.request.user.id)  # Assuming the user is logged in
                 }
             )
-            print(checkout_session)
 
             return redirect(checkout_session.url, code=303)
         except stripe.error.StripeError as e:
@@ -239,7 +238,24 @@ class CreateCheckoutSessionView(generic.View):
 
 
 def success(request, booking_id):
-    return render(request, "pages/success.html")
+
+    service = get_object_or_404(Service, id=int(booking_id))
+    print(service)
+    print(request.user)
+
+    # Create a booking record for the user
+    booking = ServiceBooking.objects.create(
+        service=service,
+        user=request.user,
+        title=service.title,
+        price=service.price,
+        credit_quantity=service.credit_quantity,
+        status='confirmed',  # Assuming the booking is confirmed after payment
+        booking_date=timezone.now()
+    )
+
+    print(booking)
+    return render(request, "pages/success.html", {"booking":booking})
 
 def cancel(request):
     return render(request, "pages/cancel.html")
@@ -291,17 +307,6 @@ def fulfill_checkout(session):
     # Fetch the service and user from the database
     service = get_object_or_404(Service, id=int(service_id))
     user = get_object_or_404(User, id=int(user_id))
-
-    # Create a booking record for the user
-    booking = ServiceBooking.objects.create(
-        service=service,
-        user=user,
-        title=service.title,
-        price=service.price,
-        credit_quantity=service.credit_quantity,
-        status='confirmed',  # Assuming the booking is confirmed after payment
-        booking_date=timezone.now()
-    )
 
     # Record the fulfillment in the Fulfillment model
     Fulfillment.objects.create(
