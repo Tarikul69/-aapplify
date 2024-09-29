@@ -1,9 +1,18 @@
+# admin.py
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User
 
 class UserModelAdmin(UserAdmin):
-    list_display = ('pk', 'username', 'email', "phone", "is_superuser", "is_staff",)
-    search_fields = ("username", "email", "phone")
+    list_display = ('pk', 'username', 'email', 'phone', 'is_superuser', 'is_staff',)
+    search_fields = ('username', 'email', 'phone')
+    ordering = ('email',)  # Optional: you can set the default ordering in admin
 
-admin.site.register(User)
+    # If you want to exclude certain fields
+    fieldsets = (
+        (None, {'fields': ('email', 'username', 'phone', 'password')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+    )
+
+admin.site.register(User, UserModelAdmin)
