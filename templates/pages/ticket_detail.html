@@ -2,6 +2,15 @@
 {% load static %}
 
 {% block content %}
+
+<style>
+    .ck-editor-container textarea {
+        width: 100% !important;
+        padding: 1rem !important;
+        border: 1px sold gray !important;
+        background: #CBD5E1;
+    }
+</style>
     <section class="py-28 flex flex-col items-center justify-center container">
         <h2 class="text-4xl font-bold text-center mb-8">Messages for Ticket #{{ ticket.pk }}</h2>
 
