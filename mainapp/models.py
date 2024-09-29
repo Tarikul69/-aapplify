@@ -46,6 +46,7 @@ class Service(BaseModel):
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=2)
     thumbnail_img = models.ImageField(_("Thumbnail Image"), upload_to='thumbnails/', height_field=None, width_field=None, max_length=None)
     description = models.TextField(_("Description"))
+    credit_quantity= models.IntegerField(_("Credit Quantity"), default=0)
 
     def __str__(self):
         return self.title
@@ -62,9 +63,17 @@ class ServiceBooking(BaseModel):
     ], default='pending')
     title = models.CharField(_("Title"), max_length=255)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=2)
-
     def __str__(self):
         return f"{self.user} - {self.service.title} ({self.get_status_display()})"
+    
+class CreditTransaction(models.Model):
+    user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name='credit_transactions')
+    credits_spent = models.IntegerField(_("Credits Spent"),default=0)
+    credits_earned = models.IntegerField(_("Credits Earned"), default=0)
+    transaction_date = models.DateTimeField(_("Transaction Date"), auto_now_add=True)
+    log=models.CharField(_("Log"), max_length=255)
+    def __str__(self):
+        return f"{self.user} - {self.credits_spent} credits on {self.service_booking.service.title}"
 
 class Fulfillment(BaseModel):
     session_id = models.CharField(max_length=255, unique=True)

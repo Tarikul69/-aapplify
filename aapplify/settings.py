@@ -35,10 +35,13 @@ INSTALLED_APPS = [
 	"django_browser_reload",
 	"django_ckeditor_5",
 	"sorl.thumbnail",
-
+	"rest_framework",
+  "rest_framework_simplejwt",
+  
 	'mainapp',
 	'corsheaders',
 	'authentication',
+  'service_email',
 ]
 
 MIDDLEWARE = [
@@ -143,6 +146,21 @@ STRIPE_WEBHOOK_SECRET=config("STRIPE_WEBHOOK_SECRET")
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+	'DEFAULT_PERMISSION_CLASSES': (
+		'rest_framework.permissions.IsAuthenticated',
+	),
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'rest_framework_simplejwt.authentication.JWTAuthentication',
+	),
+}
+
+SIMPLE_JWT = {
+  'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
+	'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}
+
 
 
 customColorPalette = [
