@@ -9,11 +9,11 @@
             {% if messages %}
                 <ul class="list-none">
                     {% for message in messages %}
-                        <li class="mb-4 p-4 ">
+                        <li class="mb-4 p-4 flex justify-start items-center gap-2 text-xl capitalize">
                             <p class="font-semibold {{ message.is_staff_response|yesno:'text-blue-600,text-gray-800' }}">
                                 {{ message.user.username }}:
                             </p>
-                            <p class="mt-2">{{ message.content|safe }}</p>
+                            <p class="">{{ message.content|safe }}</p>
                         </li>
                     {% endfor %}
                 </ul>

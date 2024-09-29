@@ -40,7 +40,8 @@
                     <div class="relative inline-block text-left">
                         <div>
                           <button type="button" class="inline-flex justify-center gap-x-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 w-10" id="menu-button" aria-expanded="true" aria-haspopup="true">
-                            <img src="{% static 'assets/icons/profile.svg' %}" alt="">
+                            {% comment %} <img src="{% static 'assets/icons/profile.svg' %}" alt=""> {% endcomment %}
+                            <p class="font-normal capitalize text-blue-500 underline">{{ user.username }}</p>
                           </button>
                         </div>
 
