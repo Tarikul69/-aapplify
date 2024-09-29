@@ -63,12 +63,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script>
-      // gsap.to("#company .logo", {
-      //   transform: "translateX(-600%)",
-      //   repeat: -1,
-      //   duration: 8,
-      //   ease: "none",
-      // });
 
       const scrollers = document.querySelectorAll(".scroller");
 
@@ -90,13 +84,12 @@
       if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         addScrollAnimation();
       }
-
       function heroAnimation() {
         var tl = gsap.timeline();
         tl.from("nav .logo, nav li, nav button", {
           y: -30,
           opacity: 0,
-          delay: 0.5,
+          delay: 1,
           duration: 0.5,
           stagger: 0.1,
         });
@@ -133,6 +126,7 @@
         );
       }
 
+
       function unlockAiAnimation() {
         var tl = gsap.timeline({
           scrollTrigger: {
@@ -160,6 +154,7 @@
           duration: 0.7,
         });
       }
+
 
       function introductionAnimation() {
         var tl = gsap.timeline({
@@ -198,7 +193,7 @@
     </script>
     <script src="{% static 'js/animation.js' %}" defer></script>
     <script src="{% static 'js/navmenu.js' %}" defer></script>
-    <script src="https://cdn.tailwindcss.com"></>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
       var gallerySwiper = new Swiper(".gallerySwiper", {
