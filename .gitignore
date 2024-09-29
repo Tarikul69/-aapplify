@@ -10,7 +10,7 @@ db.sqlite3
 .DS_Store
 **/.DS_Store
 venv/
-env/
+.env
 .vscode/
 Dockerfile
 docker-compose.yml
