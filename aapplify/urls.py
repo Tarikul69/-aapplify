@@ -9,6 +9,8 @@ urlpatterns = [
     path("", include("mainapp.urls")),
     path("auth/", include("authentication.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
+    path('api/service-email/', include('service_email.urls')),
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

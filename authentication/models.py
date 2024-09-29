@@ -28,6 +28,8 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(_("Superuser"), default=False)
     role = models.CharField(_("Role"), max_length=50, choices=ROLES, default=REGULAR_USER)
 
+    credits= models.IntegerField(_("Credits"), default=0)
+
     USERNAME_FIELD = "email"
 
     objects = UserManager()
