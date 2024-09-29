@@ -37,7 +37,7 @@ INSTALLED_APPS = [
 	"sorl.thumbnail",
 	"rest_framework",
   "rest_framework_simplejwt",
-  
+
 	'mainapp',
 	'corsheaders',
 	'authentication',
@@ -132,8 +132,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "mrubel.documents@gmail.com"
-EMAIL_HOST_PASSWORD = "pvlx xamq clzt dpep"
+EMAIL_HOST_USER = config("SMTP_EMAIL")
+EMAIL_HOST_PASSWORD = config("SMTP_APP_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "Aapplify Management Team"
