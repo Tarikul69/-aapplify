@@ -9,37 +9,47 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
 
-def email_sender(user_email, message, subject="Aapplify app password"):
-    send_mail(
-        subject,
-        message,
-        'fff147570@gmail.com',
-        [user_email],
-        fail_silently=False,
-    )
 
+BASE_URL = settings.BASE_URL
+SENDER_EMAIL = settings.EMAIL_HOST_USER
+
+def clean_string(s):
+    """Remove non-breaking spaces and ensure UTF-8 encoding."""
+    return s.replace('\xa0', ' ').encode('utf-8').decode('utf-8')
 
 def password_set_email(user):
-    email = user.email
+    email = clean_string(user.email)  # Clean user email
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
-    
+
     reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-    
+
     subject = 'Set your new password'
-    message = render_to_string('account/password_reset_email.html', {
+
+    # Render the email message
+    message = render_to_string('authentication/password_reset_email.html', {
         'user': user,
-        'reset_link': f"https://server.basepapers.co{reset_link}",
+        'reset_link': f"{BASE_URL}/{reset_link}",
     })
     
-    # Send the email
-    my_email = "fff147570@gmail.com"
+    print(SENDER_EMAIL)
+    print(BASE_URL)
+
+    # Clean the message to ensure it has no non-breaking spaces
+    message = clean_string(message)
+
+    # Create the email message
     email_message = EmailMessage(
         subject,
         message,
-        my_email,
+        SENDER_EMAIL,
         [email],
     )
-    email_message.content_subtype = 'html'  # This is important to render the message as HTML
+    
+    # Set the content subtype to 'html'
+    email_message.content_subtype = 'html'
+
+    # Send the email
     email_message.send(fail_silently=False)
