@@ -15,9 +15,9 @@
 
 {% block content %}
 
-<section class="py-28">
+<section class="py-28 container">
     {% if messages %}
-    <ul class="messages">
+    <ul class="messages text-center pb-12 text-blue-600 text-xl">
         {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}

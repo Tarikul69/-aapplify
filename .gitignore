@@ -5,6 +5,8 @@
 *.DS_Store
 **/__pycache__
 **/.DS_Store
-.env
 venv
 .vscode
+db.sqlite3
+Dockerfile
+docker-copose.yml
