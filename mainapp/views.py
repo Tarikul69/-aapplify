@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.contrib import messages
 from django.http import JsonResponse
@@ -78,6 +79,8 @@ class AddBlogView(LoginRequiredMixin, View):
         # Form is not valid, render the form with errors
         return render(request, 'pages/addblog.html', {'form': form})
 
+def get_random_staff():
+    pass
 class TokenView(View):
     def get(self, request):
         # Fetch the tickets for the logged-in user
@@ -95,6 +98,7 @@ class TokenView(View):
             message = form.cleaned_data["message"]
             ticket = form.save(commit=False)
             ticket.user = request.user
+            ticket.staff = get_random_staff()
             ticket.save()
 
             Message.objects.create(
@@ -257,6 +261,7 @@ def cancel(request):
     return render(request, "pages/cancel.html")
 
 
+@csrf_exempt
 def stripe_webhook(request):
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
@@ -277,7 +282,6 @@ def stripe_webhook(request):
     # Handle the event
     if event['type'] == 'checkout.session.completed' or event['type'] == 'checkout.session.async_payment_succeeded':
         session = event['data']['object']
-        print(session)
         fulfill_checkout(session)
 
     return HttpResponse(status=200)

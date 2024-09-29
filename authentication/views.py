@@ -16,6 +16,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 
 from .models import User
+from authentication.mail_utils import password_set_email
 
 
 # Create your views here.
@@ -73,7 +74,7 @@ class PasswordReset(View):
         try:
             user = User.objects.get(email=email)
             # Call the function to send the password reset email
-            password_set_email(user, reset=True)
+            password_set_email(user)
             return render(request, 'pages/password_reset_done.html')  # Show a success message
         except User.DoesNotExist:
             return render(request, 'pages/password_reset.html', {
@@ -81,33 +82,33 @@ class PasswordReset(View):
             })
 
 
-def password_set_email(user, reset=False):
-    email = user.email
-    token = default_token_generator.make_token(user)
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
+# def password_set_email(user, reset=False):
+#     email = user.email
+#     token = default_token_generator.make_token(user)
+#     uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-    reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+#     reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
 
-    subject = 'Set your new password'
-    if reset:
-        message = render_to_string('pages/password_reset_email.html', {
-        'user': user,
-        'reset_link': f"http://localhost:8000/auth/{reset_link}",
-    })
-    else:
-        message = render_to_string('pages/password_set_email.html', {
-            'user': user,
-            'reset_link': f"http://localhost:8000/auth/{reset_link}",
-        })
+#     subject = 'Set your new password'
+#     if reset:
+#         message = render_to_string('pages/password_reset_email.html', {
+#         'user': user,
+#         'reset_link': f"http://localhost:8000/auth/{reset_link}",
+#     })
+#     else:
+#         message = render_to_string('pages/password_set_email.html', {
+#             'user': user,
+#             'reset_link': f"http://localhost:8000/auth/{reset_link}",
+#         })
 
-    # Send the email
-    my_email = settings.EMAIL_HOST_USER
+#     # Send the email
+#     my_email = settings.EMAIL_HOST_USER
 
-    email_message = EmailMessage(
-        subject,
-        message,
-        my_email,
-        [email],
-    )
-    email_message.content_subtype = 'html'  # This is important to render the message as HTML
-    email_message.send(fail_silently=False)
+#     email_message = EmailMessage(
+#         subject,
+#         message,
+#         my_email,
+#         [email],
+#     )
+#     email_message.content_subtype = 'html'  # This is important to render the message as HTML
+#     email_message.send(fail_silently=False)
