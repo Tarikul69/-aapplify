@@ -50,5 +50,5 @@ def generate_mail(request):
         except Exception as e:
             return JsonResponse({'error': 'Failed to process request.'}, status=500)
         
-        return JsonResponse({'response': response,'remaining credits': user.credits}, status=200)
+        return JsonResponse({'response': response,'remaining_credits': user.credits}, status=200)
 
