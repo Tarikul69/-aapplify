@@ -11,7 +11,11 @@
                     {% for message in messages %}
                         <li class="mb-4 p-4 flex justify-start items-center gap-2 text-xl capitalize">
                             <p class="font-semibold {{ message.is_staff_response|yesno:'text-blue-600,text-gray-800' }}">
+                                {% if message.user.is_staff %}
+                                    staff:
+                                {% else %}
                                 {{ message.user.username }}:
+                                {% endif %}
                             </p>
                             <p class="">{{ message.content|safe }}</p>
                         </li>

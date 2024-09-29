@@ -113,19 +113,22 @@ class TokenView(View):
 class TicketDetailView(View):
     def get(self, request, pk):
         ticket = get_object_or_404(Ticket, pk=pk)
-        messages = Message.objects.filter(room=ticket)
+        messages = Message.objects.filter(room=ticket).reverse()
         form = MessageForm()  # Initialize the form
         return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages, 'form': form})
 
     def post(self, request, pk):
-        ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
+        ticket = get_object_or_404(Ticket, pk=pk)
         form = MessageForm(request.POST)
         if form.is_valid():
             message = form.save(commit=False)
-            message.room = ticket  # Associate message with the ticket
-            message.user = request.user  # Assuming the user is logged in
+            message.room = ticket
+            message.user = request.user
+            # Automatically flag staff messages
+            if request.user.is_staff:
+                message.is_staff_response = True
             message.save()
-            return redirect('ticket_detail', pk=ticket.id)  # Redirect to the ticket detail page
+            return redirect('ticket_detail', pk=ticket.id)
 
         messages = Message.objects.filter(room=ticket)
         return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages, 'form': form})
