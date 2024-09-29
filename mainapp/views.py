@@ -291,6 +291,7 @@ def fulfill_checkout(session):
         user=user,
         title=service.title,
         price=service.price,
+        credit_quantity=service.credit_quantity,
         status='confirmed',  # Assuming the booking is confirmed after payment
         booking_date=timezone.now()
     )

@@ -63,6 +63,7 @@ class ServiceBooking(BaseModel):
     ], default='pending')
     title = models.CharField(_("Title"), max_length=255)
     price = models.DecimalField(_("Price"), max_digits=10, decimal_places=2)
+    credit_quantity= models.IntegerField(_("Credit Quantity"), default=0)
     
     def __str__(self):
         return f"{self.user} - {self.service.title} ({self.get_status_display()})"
