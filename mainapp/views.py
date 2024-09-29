@@ -218,13 +218,14 @@ class CreateCheckoutSessionView(generic.View):
                     },
                 ],
                 mode='payment',
-                success_url=f"http://{host}{reverse('success')}",
+                success_url=f"http://{host}{reverse('success', kwargs={'booking_id': service.id})}",
                 cancel_url=f"http://{host}{reverse('cancel')}",
                 metadata={
                     'service_id': str(service.id),
                     'user_id': str(self.request.user.id)  # Assuming the user is logged in
                 }
             )
+            print(checkout_session)
 
             return redirect(checkout_session.url, code=303)
         except stripe.error.StripeError as e:
@@ -249,6 +250,7 @@ def stripe_webhook(request):
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
+        print(event)
     except ValueError as e:
         # Invalid payload
         return HttpResponse(status=400)
@@ -259,6 +261,7 @@ def stripe_webhook(request):
     # Handle the event
     if event['type'] == 'checkout.session.completed' or event['type'] == 'checkout.session.async_payment_succeeded':
         session = event['data']['object']
+        print(session)
         fulfill_checkout(session)
 
     return HttpResponse(status=200)
