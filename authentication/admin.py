@@ -6,4 +6,4 @@ class UserModelAdmin(UserAdmin):
     list_display = ('pk', 'username', 'email', "phone", "is_superuser", "is_staff",)
     search_fields = ("username", "email", "phone")
 
-admin.site.register(User, UserModelAdmin)
+admin.site.register(User)
