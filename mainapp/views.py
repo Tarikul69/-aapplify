@@ -13,7 +13,8 @@ from django.http import HttpResponse
 import stripe
 from django.conf import settings
 
-from .models import Service, BlogPost, Ticket, Message, ServiceBooking, Fulfillment
+from .models import (BlogPost, CreditTransaction, Fulfillment, Message, Service, ServiceBooking,
+    Ticket)
 from .forms import BlogPostForm, TicketForm, MessageForm
 from authentication.models import User
 
@@ -296,4 +297,14 @@ def fulfill_checkout(session):
         session_id=session_id,
         fulfilled=True
     )
+
+    user.credits += service.credit_quantity
+    user.save()
+    CreditTransaction.objects.create(
+        user=user,
+        credits_earned=service.credit_quantity,
+
+        log=f"Service {service.title} booked."
+    )
+
     print(f"Service {service.title} booked for user {user.username}.")
