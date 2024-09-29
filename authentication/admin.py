@@ -7,9 +7,8 @@ from .models import User
 class UserModelAdmin(UserAdmin):
     list_display = ('pk', 'username', 'email', 'phone', 'is_superuser', 'is_staff',)
     search_fields = ('username', 'email', 'phone')
-    ordering = ('email',)  # Optional: you can set the default ordering in admin
+    ordering = ('email',) 
 
-    # If you want to exclude certain fields
     fieldsets = (
         (None, {'fields': ('email', 'username', 'phone', 'password')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
