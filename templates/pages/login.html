@@ -16,16 +16,16 @@
 
         <form method="post" action="{% url 'auth_login' %}" class="flex flex-col items-start gap-5 mx-auto w-[480px]">
             {% csrf_token %}
-            {{ login_form.non_field_errors }}
+            <p class="text-red-600">{{ login_form.non_field_errors }}</p>
             <div class="flex flex-col gap-2 items-start justify-center w-full">
                 <label class="text-xl" for="{{ login_form.email.id_for_label }}">Email</label>
                 {{ login_form.email }}
-                {{ login_form.email.errors }}
+                <p class="text-red-600">{{ login_form.email.errors }}</p>
             </div>
             <div class="flex flex-col gap-2 items-start justify-center w-full">
                 <label class="text-xl" for="{{ login_form.password.id_for_label }}">Password</label>
                 {{ login_form.password }}
-                {{ login_form.password.errors }}
+                <p class="text-red-600">{{ login_form.password.errors }}</p>
             </div>
             <!-- Forgot Password Link -->
             <div class="flex justify-end w-full">

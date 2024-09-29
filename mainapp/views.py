@@ -113,19 +113,22 @@ class TokenView(View):
 class TicketDetailView(View):
     def get(self, request, pk):
         ticket = get_object_or_404(Ticket, pk=pk)
-        messages = Message.objects.filter(room=ticket)
+        messages = Message.objects.filter(room=ticket).reverse()
         form = MessageForm()  # Initialize the form
         return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages, 'form': form})
 
     def post(self, request, pk):
-        ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
+        ticket = get_object_or_404(Ticket, pk=pk)
         form = MessageForm(request.POST)
         if form.is_valid():
             message = form.save(commit=False)
-            message.room = ticket  # Associate message with the ticket
-            message.user = request.user  # Assuming the user is logged in
+            message.room = ticket
+            message.user = request.user
+            # Automatically flag staff messages
+            if request.user.is_staff:
+                message.is_staff_response = True
             message.save()
-            return redirect('ticket_detail', pk=ticket.id)  # Redirect to the ticket detail page
+            return redirect('ticket_detail', pk=ticket.id)
 
         messages = Message.objects.filter(room=ticket)
         return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages, 'form': form})
@@ -215,13 +218,14 @@ class CreateCheckoutSessionView(generic.View):
                     },
                 ],
                 mode='payment',
-                success_url=f"http://{host}{reverse('success')}",
+                success_url=f"http://{host}{reverse('success', kwargs={'booking_id': service.id})}",
                 cancel_url=f"http://{host}{reverse('cancel')}",
                 metadata={
                     'service_id': str(service.id),
                     'user_id': str(self.request.user.id)  # Assuming the user is logged in
                 }
             )
+            print(checkout_session)
 
             return redirect(checkout_session.url, code=303)
         except stripe.error.StripeError as e:
@@ -246,6 +250,7 @@ def stripe_webhook(request):
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
+        print(event)
     except ValueError as e:
         # Invalid payload
         return HttpResponse(status=400)
@@ -256,6 +261,7 @@ def stripe_webhook(request):
     # Handle the event
     if event['type'] == 'checkout.session.completed' or event['type'] == 'checkout.session.async_payment_succeeded':
         session = event['data']['object']
+        print(session)
         fulfill_checkout(session)
 
     return HttpResponse(status=200)
@@ -288,6 +294,7 @@ def fulfill_checkout(session):
         user=user,
         title=service.title,
         price=service.price,
+        credit_quantity=service.credit_quantity,
         status='confirmed',  # Assuming the booking is confirmed after payment
         booking_date=timezone.now()
     )
