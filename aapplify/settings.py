@@ -37,7 +37,6 @@ INSTALLED_APPS = [
 	"sorl.thumbnail",
 	"rest_framework",
   "rest_framework_simplejwt",
-	'corsheaders',
 
 
 	'mainapp',
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
+	'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.common.CommonMiddleware',
     'aapplify.middlewares.DisableCSRFMiddleware',
 	# 'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,7 +58,6 @@ MIDDLEWARE = [
 	# "django_browser_reload.middleware.BrowserReloadMiddleware",
   
 
-	'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True  # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
