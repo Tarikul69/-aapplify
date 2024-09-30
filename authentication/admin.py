@@ -10,7 +10,7 @@ class UserModelAdmin(UserAdmin):
     ordering = ('email',) 
 
     fieldsets = (
-        (None, {'fields': ('email', 'username', 'phone', 'password')}),
+        (None, {'fields': ('email', 'username', 'phone', 'credits', 'password')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )
 

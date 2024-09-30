@@ -21,8 +21,8 @@ def generate_mail(request):
         if not prompt:
             return JsonResponse({'error': 'Question is required.'},status=400)
 
-        if not request.user.service_bookings.filter(service_id=1).exists():
-            return JsonResponse({'error': 'You do not have access to this service.'},status=403)
+        # if not request.user.service_bookings.filter(service_id=1).exists():
+        #     return JsonResponse({'error': 'You do not have access to this service.'},status=403)
 
         # return JsonResponse({'response': 'service email!'},status=200)
         
