@@ -43,7 +43,7 @@
 
     {% block css %}
     {% endblock %}
-    <title>Document</title>
+    <title>{{ title|default:"aapplify" }}</title>
   </head>
   <body>
     {% include "components/header.html" %}

@@ -24,7 +24,7 @@ from authentication.mail_utils import password_set_email
 class RegisterView(View):
     def get(self, request):
         form = UserRegisterForm()
-        return render(request, 'pages/register.html', {'registration_form': form})
+        return render(request, 'pages/register.html', {'registration_form': form, "title": "registration"})
 
     def post(self, request):
         form = UserRegisterForm(request.POST)
@@ -44,7 +44,7 @@ class LoginView(View):
             return redirect("main_home")
 
         form = UserLoginForm()
-        return render(request, "pages/login.html", {'login_form': form})
+        return render(request, "pages/login.html", {'login_form': form, "title": "login"})
 
     def post(self, request):
         form = UserLoginForm(request.POST)

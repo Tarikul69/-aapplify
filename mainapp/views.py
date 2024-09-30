@@ -25,31 +25,31 @@ endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 # Create your views here.
 class HomeView(View):
     def get(self, request):
-        return render(request, 'pages/home.html')
+        return render(request, 'pages/home.html',  {'title': 'Home'} )
 
 class AboutView(View):
     def get(self, request):
-        return render(request, 'pages/about.html')
+        return render(request, 'pages/about.html',  {'title': 'About'})
 
 class BlogView(View):
     def get(self, request, blog_id=None):
         if blog_id:
             # Get a single blog post by ID
             blog = get_object_or_404(BlogPost, id=blog_id)
-            return render(request, 'pages/blog_detail.html', {'blog': blog})
+            return render(request, 'pages/blog_detail.html', {'blog': blog, 'title': 'Blog'})
 
         # Get all blog posts if no blog_id is provided
         blogs = BlogPost.objects.filter(is_accepted=True)
-        return render(request, 'pages/blog.html', {'blogs': blogs})
+        return render(request, 'pages/blog.html', {'blogs': blogs, 'title': 'Blog'})
 
 
 class ContactView(View):
     def get(self, request):
-        return render(request, 'pages/contact.html')
+        return render(request, 'pages/contact.html', {'title': 'Contact'})
 
 class FAQView(View):
     def get(self, request):
-        return render(request, 'pages/faq.html')
+        return render(request, 'pages/faq.html', {'title': 'FAQ'})
 
 
 class AddBlogView(LoginRequiredMixin, View):
@@ -60,7 +60,7 @@ class AddBlogView(LoginRequiredMixin, View):
     def get(self, request, slug=None):
         form = BlogPostForm()
 
-        return render(request, 'pages/addblog.html', {'form': form})
+        return render(request, 'pages/addblog.html', {'form': form, 'title': 'Add Blog'})
 
     def post(self, request, slug=None):
         form = BlogPostForm(request.POST, request.FILES)
@@ -89,7 +89,7 @@ class TokenView(View):
         else:
             tickets = Ticket.objects.filter(user=request.user)
         form = TicketForm()
-        return render(request, 'pages/token.html', context={"form": form, "tickets": tickets})
+        return render(request, 'pages/token.html', context={"form": form, "tickets": tickets, "title":"Token"})
 
 
     def post(self, request, slug=None):
@@ -119,7 +119,7 @@ class TicketDetailView(View):
         ticket = get_object_or_404(Ticket, pk=pk)
         messages = Message.objects.filter(room=ticket).reverse()
         form = MessageForm()  # Initialize the form
-        return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages, 'form': form})
+        return render(request, 'pages/ticket_detail.html', {'ticket': ticket, 'messages': messages, 'form': form, "title":"token"})
 
     def post(self, request, pk):
         ticket = get_object_or_404(Ticket, pk=pk)
@@ -149,7 +149,7 @@ class BlogPostView(View):
             # Create a new blog post
             form = BlogPostForm()
 
-        return render(request, 'pages/blog_post_form.html', {'form': form})
+        return render(request, 'pages/blog_post_form.html', {'form': form, "title":"Blog"})
 
     def post(self, request, slug=None):
         if slug:
@@ -177,6 +177,7 @@ class ProfileView(View):
         'profile': profile,
         'blogs': blogs,
         'booking': booking,
+        'title': profile
             }
 
         return render(request, 'pages/profile.html', context)
@@ -186,11 +187,11 @@ class ServiceView(View):
         if service_id:
             service = get_object_or_404(Service, id=service_id)
             print(service)
-            return render(request, 'pages/service_detail.html', {'service': service})
+            return render(request, 'pages/service_detail.html', {'service': service, 'title':'service'})
 
         # List all services
         services = Service.objects.all()
-        return render(request, 'pages/services.html', {'services': services})
+        return render(request, 'pages/services.html', {'services': services, 'title':'Service'})
 
 
 class CreateCheckoutSessionView(generic.View):
