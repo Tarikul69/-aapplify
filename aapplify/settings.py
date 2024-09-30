@@ -37,6 +37,8 @@ INSTALLED_APPS = [
 	"sorl.thumbnail",
 	"rest_framework",
   "rest_framework_simplejwt",
+	'corsheaders',
+
 
 	'mainapp',
 	'corsheaders',
@@ -54,7 +56,12 @@ MIDDLEWARE = [
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	# "django_browser_reload.middleware.BrowserReloadMiddleware",
+  
+
+	'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
 
 ROOT_URLCONF = 'aapplify.urls'
 
