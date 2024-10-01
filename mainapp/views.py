@@ -209,7 +209,7 @@ class CreateCheckoutSessionView(generic.View):
 
             # Create a Checkout Session
             checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
+                payment_method_types=['card', 'us_bank_account'],
                 line_items=[
                     {
                         'price_data': {

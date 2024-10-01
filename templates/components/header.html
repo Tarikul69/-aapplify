@@ -1,4 +1,8 @@
+{% load plugin_tags %}
+
 {% load static %}
+
+{% get_last_plugin as last_plugin %}
 
 <nav class="border-b border-primary_c sticky top-0 z-50 bg-white">
     <div class="container z-20">
@@ -54,6 +58,9 @@
                             <a href="{% url 'main_profile' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Profile</a>
                             <a href="{% url 'main_token' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Tickets</a>
                             <a href="{% url 'add_blog' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Add Blog</a>
+                            {% if last_plugin %}
+                            <a href="{{ last_plugin.file.url }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Download</a>
+                            {% endif %}
                             <hr>
                             <a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-3" href="{% url 'auth_logout' %}">Logout</a>
                           </div>
@@ -83,6 +90,9 @@
                         <li><a href="{% url 'main_profile' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Profile</a></li>
                         <li><a href="{% url 'main_token' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Tickets</a></li>
                         <li><a href="{% url 'add_blog' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Add Blog</a></li>
+                        {% if last_plugin %}
+                        <li><a href="{{ last_plugin.file.url }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Download</a></li>
+                        {% endif %}
                     {% endif %}
                     <li>
                         <hr>

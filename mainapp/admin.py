@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, BlogPost, Ticket, Message, ServiceBooking
+from .models import Service, BlogPost, Ticket, Message, ServiceBooking, Plugin
 
 # Register your models here.
 
@@ -29,3 +29,10 @@ class ServiceBookingAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = 'Aaplify dashboard'
+
+
+
+class PluginAdmin(admin.ModelAdmin):
+    list_display = ["pk", "file"]
+
+admin.site.register(Plugin, PluginAdmin)

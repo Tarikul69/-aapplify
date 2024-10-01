@@ -103,3 +103,11 @@ class BlogPost(BaseModel):
         if not self.slug:
             self.slug = slugify(self.title)
         super(BlogPost, self).save(*args, **kwargs)
+
+
+
+def plugin_path(instance, filename, **kwaargs):
+    return  f"plugin/{filename}"
+
+class Plugin(models.Model):
+    file = models.FileField(upload_to=plugin_path)
